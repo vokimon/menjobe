@@ -1,5 +1,5 @@
 """
-Django settings for menjodelbaix project.
+Django settings for devsite project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/dev/topics/settings/
@@ -49,9 +49,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'menjodelbaix.urls'
+ROOT_URLCONF = 'devsite.urls'
 
-WSGI_APPLICATION = 'menjodelbaix.wsgi.application'
+WSGI_APPLICATION = 'devsite.wsgi.application'
 
 
 # Database
