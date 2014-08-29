@@ -66,7 +66,7 @@ class RetailPoint_Test(TestCase) :
 class ProductsInRetailPoints_Test(TestCase) :
 	def createN(self, model, prefix, n) :
 		rows = [
-			model(name="{}{}".format(prefix, i+1))
+			model(name="{}{}".format(prefix, i))
 			for i in range(n)]
 		for row in rows :
 			row.save()
@@ -77,16 +77,16 @@ class ProductsInRetailPoints_Test(TestCase) :
 	def test_createN(self) :
 		rows = self.createN(Product, "Product", 4)
 		self.assertEqual(self.collect(rows),
+			"Product0\n"
 			"Product1\n"
 			"Product2\n"
 			"Product3\n"
-			"Product4\n"
 		)
 
 	def test_productList_whenEmpty(self) :
 		r = RetailPoint(name="a retail point")
 		r.save()
-		p = self.createN(Product, "Product", 10)
+		p = self.createN(Product, "Product", 5)
 		self.assertEqual(
 			self.collect(r.retailedProducts.all()),
 			"")
@@ -94,22 +94,22 @@ class ProductsInRetailPoints_Test(TestCase) :
 	def test_productList_whenOne(self) :
 		r = RetailPoint(name="a retail point")
 		r.save()
-		p = self.createN(Product, "Product", 10)
+		p = self.createN(Product, "Product", 5)
 		r.retailedProducts.add(p[1])
 		self.assertEqual(
 			self.collect(r.retailedProducts.all()),
-			"Product2\n"
+			"Product1\n"
 			"")
 
 	def test_productList_whenMany(self) :
 		r = RetailPoint(name="a retail point")
 		r.save()
-		p = self.createN(Product, "Product", 10)
+		p = self.createN(Product, "Product", 5)
 		r.retailedProducts.add(*p[1:5:2])
 		self.assertEqual(
 			self.collect(r.retailedProducts.all()),
-			"Product2\n"
-			"Product4\n"
+			"Product1\n"
+			"Product3\n"
 			"")
 
 	def test_productRetailPoints_noRetailers(self) :
@@ -127,7 +127,7 @@ class ProductsInRetailPoints_Test(TestCase) :
 		rs[0].retailedProducts.add(p)
 		self.assertEqual(
 			self.collect(p.retailpoint_set.all()),
-			"Retailer 1\n"
+			"Retailer 0\n"
 			"")
 
 	def test_productRetailPoints_manyRetailers(self) :
@@ -138,10 +138,9 @@ class ProductsInRetailPoints_Test(TestCase) :
 		rs[3].retailedProducts.add(p)
 		self.assertEqual(
 			self.collect(p.retailpoint_set.all()),
-			"Retailer 1\n"
-			"Retailer 4\n"
+			"Retailer 0\n"
+			"Retailer 3\n"
 			"")
-
 
 
 
