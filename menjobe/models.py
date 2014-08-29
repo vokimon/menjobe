@@ -22,4 +22,8 @@ class RetailPoint(models.Model) :
 	def __str__(self) :
 		return self.name
 
+	def sells(self, *products) :
+		self.retailedProducts.add(*products)
+
+
 

@@ -76,6 +76,9 @@ class ProductsInRetailPoints_Test(TestCase) :
 			"4\n"
 		)
 
+	def save(self, *args) :
+		return [a.save() for a in args ]
+
 	def test_productList_whenEmpty(self) :
 		r = RetailPoint(name="a retail point")
 		r.save()
@@ -87,9 +90,9 @@ class ProductsInRetailPoints_Test(TestCase) :
 	def test_productList_whenOne(self) :
 		r = RetailPoint(name="a retail point")
 		p = Product(name="Product 1")
-		for a in r, p : a.save()
+		self.save( r, p )
 
-		r.retailedProducts.add(p)
+		r.sells(p)
 
 		self.assertEqual(
 			self.collect(r.retailedProducts.all()),
@@ -100,9 +103,9 @@ class ProductsInRetailPoints_Test(TestCase) :
 		r = RetailPoint(name="a retail point")
 		p1 = Product(name="Product 1")
 		p2 = Product(name="Product 2")
-		for a in r, p1, p2 : a.save()
+		self.save( r, p1, p2 )
 
-		r.retailedProducts.add(p1, p2)
+		r.sells(p1, p2)
 
 		self.assertEqual(
 			self.collect(r.retailedProducts.all()),
@@ -120,9 +123,9 @@ class ProductsInRetailPoints_Test(TestCase) :
 	def test_productRetailPoints_oneRetailer(self) :
 		r = RetailPoint(name="Retailer 1")
 		p = Product(name="a product")
-		for a in p, r: a.save()
+		self.save( p, r)
 
-		r.retailedProducts.add(p)
+		r.sells(p)
 
 		self.assertEqual(
 			self.collect(p.retailpoint_set.all()),
@@ -133,18 +136,16 @@ class ProductsInRetailPoints_Test(TestCase) :
 		r1 = RetailPoint(name="Retailer 1")
 		r2 = RetailPoint(name="Retailer 2")
 		p = Product(name="a product")
-		for a in p, r1, r2 : a.save()
+		self.save(p, r1, r2)
 
-		r1.retailedProducts.add(p)
-		r2.retailedProducts.add(p)
+		r1.sells(p)
+		r2.sells(p)
 
 		self.assertEqual(
 			self.collect(p.retailpoint_set.all()),
 			"Retailer 1\n"
 			"Retailer 2\n"
 			"")
-
-
 
 
 
