@@ -11,6 +11,9 @@ class Product(models.Model) :
 	def __str__(self) :
 		return self.name
 
+	def retailPoints(self) :
+		return self.retailpoint_set.all()
+
 class RetailPoint(models.Model) :
 	name = models.CharField(
 			max_length=200,
