@@ -7,13 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('menjobe', '0002_product_name'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name='RetailPoint',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
             ],
             options={
             },
