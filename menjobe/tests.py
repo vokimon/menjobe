@@ -13,6 +13,10 @@ class Product_Test(TestCase) :
 		p.save()
 		self.assertEqual(p.id, 1)
 
+	def test_str(self) :
+		p = Product(name="Tomato")
+		self.assertEqual(str(p), "Tomato")
+
 	def test_notName_raisesIntegrity(self) :
 		p = Product()
 		with self.assertRaises(IntegrityError) as cm :
@@ -30,12 +34,13 @@ class RetailPoint_Test(TestCase) :
 		r.save()
 		self.assertNotEqual(r.id, None)
 
-	def test_noName_raisesIntegrity(self) :
-		p = Product()
-		with self.assertRaises(IntegrityError) as cm :
-			p.save()
-		self.assertEquals(str(cm.exception),
-			"NOT NULL constraint failed: menjobe_product.name")
+	def test_str(self) :
+		r = RetailPoint(name="Can Xavi")
+		self.assertEqual(str(r), "Can Xavi")
+		r.save()
+		self.assertNotEqual(r.id, None)
+
+
 
 
 
