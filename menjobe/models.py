@@ -25,5 +25,7 @@ class RetailPoint(models.Model) :
 	def sells(self, *products) :
 		self.retailedProducts.add(*products)
 
+	def products(self) :
+		return self.retailedProducts.all()
 
 

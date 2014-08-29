@@ -84,7 +84,7 @@ class ProductsInRetailPoints_Test(TestCase) :
 		r.save()
 
 		self.assertEqual(
-			self.collect(r.retailedProducts.all()),
+			self.collect(r.products()),
 			"")
 
 	def test_productList_whenOne(self) :
@@ -95,7 +95,7 @@ class ProductsInRetailPoints_Test(TestCase) :
 		r.sells(p)
 
 		self.assertEqual(
-			self.collect(r.retailedProducts.all()),
+			self.collect(r.products()),
 			"Product 1\n"
 			"")
 
@@ -108,7 +108,7 @@ class ProductsInRetailPoints_Test(TestCase) :
 		r.sells(p1, p2)
 
 		self.assertEqual(
-			self.collect(r.retailedProducts.all()),
+			self.collect(r.products()),
 			"Product 1\n"
 			"Product 2\n"
 			"")
