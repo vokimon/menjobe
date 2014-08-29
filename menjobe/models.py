@@ -20,7 +20,7 @@ class RetailPoint(models.Model) :
 			default=None,
 			unique=True,
 			)
-	retailedProducts = models.ManyToManyField(Product)
+	retailedProducts = models.ManyToManyField(Product, blank=True)
 
 	def __str__(self) :
 		return self.name
