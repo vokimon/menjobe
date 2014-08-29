@@ -17,8 +17,17 @@ class RetailPoint(models.Model) :
 			default=None,
 			unique=True,
 			)
-#	retailedProducts = models.ManyToMany(Product)
+	retailedProducts = models.ManyToManyField(Product)
 
 	def __str__(self) :
 		return self.name
+
+	def addProduct(self, product) :
+		pass
+
+	def productList(self) :
+		return "".join((
+			"{}\n".format(a)
+			for a in self.retailedProducts.all() ))
+
 

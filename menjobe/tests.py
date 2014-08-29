@@ -46,9 +46,8 @@ class RetailPoint_Test(TestCase) :
 	def test_str(self) :
 		r = RetailPoint(name="Can Xavi")
 		self.assertEqual(str(r), "Can Xavi")
-		r.save()
 
-	def test_notName_raisesIntegrity(self) :
+	def test_name_nullRaises(self) :
 		r = RetailPoint()
 		with self.assertRaises(IntegrityError) as cm :
 			r.save()
@@ -63,6 +62,86 @@ class RetailPoint_Test(TestCase) :
 			r2.save()
 		self.assertEqual(str(cm.exception),
 			"UNIQUE constraint failed: menjobe_retailpoint.name")
+
+class ProductsInRetailPoints_Test(TestCase) :
+	def createN(self, model, prefix, n) :
+		rows = [
+			model(name="{}{}".format(prefix, i+1))
+			for i in range(n)]
+		for row in rows :
+			row.save()
+		return rows
+	def collect(self, iterable) :
+		return "".join("{}\n".format(o) for o in iterable)
+
+	def test_createN(self) :
+		rows = self.createN(Product, "Product", 4)
+		self.assertEqual(self.collect(rows),
+			"Product1\n"
+			"Product2\n"
+			"Product3\n"
+			"Product4\n"
+		)
+
+	def test_productList_whenEmpty(self) :
+		r = RetailPoint(name="a retail point")
+		r.save()
+		p = self.createN(Product, "Product", 10)
+		self.assertEqual(
+			self.collect(r.retailedProducts.all()),
+			"")
+
+	def test_productList_whenOne(self) :
+		r = RetailPoint(name="a retail point")
+		r.save()
+		p = self.createN(Product, "Product", 10)
+		r.retailedProducts.add(p[1])
+		self.assertEqual(
+			self.collect(r.retailedProducts.all()),
+			"Product2\n"
+			"")
+
+	def test_productList_whenMany(self) :
+		r = RetailPoint(name="a retail point")
+		r.save()
+		p = self.createN(Product, "Product", 10)
+		r.retailedProducts.add(*p[1:5:2])
+		self.assertEqual(
+			self.collect(r.retailedProducts.all()),
+			"Product2\n"
+			"Product4\n"
+			"")
+
+	def test_productRetailPoints_noRetailers(self) :
+		rs = self.createN(RetailPoint, "Retailer ", 4)
+		p = Product(name="a product")
+		p.save()
+		self.assertEqual(
+			self.collect(p.retailpoint_set.all()),
+			"")
+
+	def test_productRetailPoints_oneRetailer(self) :
+		rs = self.createN(RetailPoint, "Retailer ", 4)
+		p = Product(name="a product")
+		p.save()
+		rs[0].retailedProducts.add(p)
+		self.assertEqual(
+			self.collect(p.retailpoint_set.all()),
+			"Retailer 1\n"
+			"")
+
+	def test_productRetailPoints_manyRetailers(self) :
+		rs = self.createN(RetailPoint, "Retailer ", 4)
+		p = Product(name="a product")
+		p.save()
+		rs[0].retailedProducts.add(p)
+		rs[3].retailedProducts.add(p)
+		self.assertEqual(
+			self.collect(p.retailpoint_set.all()),
+			"Retailer 1\n"
+			"Retailer 4\n"
+			"")
+
 
 
 
