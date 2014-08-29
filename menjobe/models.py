@@ -2,13 +2,21 @@ from django.db import models
 
 
 class Product(models.Model) :
-	name = models.CharField(max_length=200, default=None)
+	name = models.CharField(
+			max_length=200,
+			default=None,
+			unique=True,
+			)
 
 	def __str__(self) :
 		return self.name
 
 class RetailPoint(models.Model) :
-	name = models.CharField(max_length=200, default=None)
+	name = models.CharField(
+			max_length=200,
+			default=None,
+			unique=True,
+			)
 #	retailedProducts = models.ManyToMany(Product)
 
 	def __str__(self) :
