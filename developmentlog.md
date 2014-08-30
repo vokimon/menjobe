@@ -11,7 +11,9 @@
 }
 </style>
 
-# Bitàcora: Menjo bé, Menjo del Baix
+# Bitàcola: Menjo bé, Menjo del Baix
+
+[This development log is written in Catalan to be used for my teaching duties. Sorry guys.]
 
 Exemple de com treballar de forma àgil amb Django i
 testos,
@@ -24,7 +26,8 @@ L'excusa és fer una applicació que faci de directori de botigues d'alimentaci�
 
 Fem un petit anàlisis previ dels requeriments.
 No ha de ser pas un anàlisis gaire exhaustiu,
-però ha de servir-nos per fer una mínima planificació del que farem.
+però ha de servir per fer-nos una mínima planificació del que farem.
+Els requeriments són sempre modificables.
 
 Volem fer una aplicació per a que
 la gent del Baix Llobregat sapiga on pot comprar fruita i verdura de kilómetre zero.
@@ -640,16 +643,17 @@ Es passa afegit aquest metode a `models.Product`:
 
 
 
-## Repetir pels punts de distribució
+## Punts de distribució
 
-No torno a escriure el mateix procés que caldria fer-se,
-pot-ser una mica més directe amb la taula `RetailPoint`
-amb un attribut `name` igual que product.
+Repetim exactament el mateix procés per crear un model de _punts de distribució_ (`RetailPoint`)
+amb un atribut `name` i les mateixes restriccions.
 
-La temptació és copiar, pegar i adaptar, i està bé fer-ho.
-Però es important anar fent fallar els testos, perque
-és molt comú l'error de que ens oblidem d'adaptar un test
-i ataca encara a `Producte` quan voliem que ataqués a `RetailPoint`.
+La temptació és copiar-ho tot de `Product` i substituir noms.
+Cal problema amb copiar,
+però, cal anar amb cura, perquè copiant sovint no substituim algun identificador
+als testos, i cobrim dues vegades `Product` i deixem sense cobertura `RetailPoint`.
+Per això, es important **fallar els testos** un a un, tot i que després
+copiem la implementació de `Product`.
 
 Al final, tindrem als testos:
 
@@ -923,7 +927,7 @@ Al final ens queda el codi així:
 I amb això ja tenim prou model implementat pel nostre cas d'ús.
 
 
-## Construïm les vistes per a una API JSON
+### Vistes per a una API JSON
 
 El cas d'ús que ens hem plantejat te dues necessitats de dades bàsiques:
 
