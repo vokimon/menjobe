@@ -69,6 +69,8 @@ Les histories d'usuari que s'ens acudeixen d'entrada són:
 
 - Una persona anònima vol saber a quins punts de distribució del poble pot trobar patates de kilometre zero
 - Una persona anònima vol explorar quins distribuidors hi ha al poble i quins productes tenen
+- Una persona anònima vol saber l'origen (productor/explotació) de les patates _de pagés_ que es venen a la fruiteria del costat de casa seva
+- Una persona anònima vol saber si les patates que està venent la cooperativa agrària són d'agricultura ecològica, integrada o industrial
 - Una persona registrada vol enviar un comentari sobre
 	- un productor
 	- un punt de distribució
@@ -410,7 +412,7 @@ Altres applicacions incloses, malgrat que no estan actives per defecte, són:
 - django.contrib.redirects: redireccions mantingudes a la base de dades
 - ...
 
-### Primer els testos!!
+### Sistema de testos
 
 Els testos del projecte els executem fent:
 
@@ -587,7 +589,7 @@ Ja passem el test que ens havíem plantejat. Confirmem els canvis, afegint les m
 	$ git commit . -m 'Products with name'
 ```
 
-## Restriccions
+### Restriccions
 
 Analitzant el codi segur que has tingut la temptació d'afegir
 paràmetres al camp `name`.
@@ -643,7 +645,7 @@ Es passa afegit aquest metode a `models.Product`:
 
 
 
-## Punts de distribució
+### Punts de distribució
 
 Repetim exactament el mateix procés per crear un model de _punts de distribució_ (`RetailPoint`)
 amb un atribut `name` i les mateixes restriccions.
@@ -698,7 +700,7 @@ I la implementació:
 			return self.name
 ```
 
-## Els punts de distribució poden tenir productes
+### Productes als punts de distribució
 
 Podem representar al model que cada punt de venda al public disposa d'un conjunt productes
 amb una relació N:N, que al Django es representa amb un camp `ManyToManyField`.
@@ -770,6 +772,8 @@ Això ens dona una certa independència per canviar com implementem la relació.
 			self.retailedProduct = product
 ```
 
+### Convertint una relació 1:N en N:N
+
 Deiem que amb la ForeignKey un punt de distribució només pot tenir un producte.
 Doncs plantejem un test amb aquest cas que no podem representar.
 
@@ -807,7 +811,7 @@ El refactor te quatre etapes:
 	- Aqui generarem una migració per la eliminació de l'estructura vella
 	- Sovint, treure la vella dona peu a renombrar la nova, si els renombrats afecten al model, cal fer migració
 
-### Duplicar
+#### Duplicar
 
 ```python
 	class Product(models.Model) :
@@ -830,7 +834,7 @@ Fixa't que hem especificat un `related_name` per evitar colisió amb l'atribut r
 TODO: Migració esquema: afegir relació
 
 
-### Farcir
+#### Farcir
 
 ```python
 	class Product(models.Model) :
@@ -856,7 +860,7 @@ Quan tornem a activar el test, i el tinguem en vermell, treurem aquesta linia pe
 
 TODO: Migració dades: duplicar dades relació
 
-### Recolzar-se
+#### Recolzar-se
 
 ```python
 	class Product(models.Model) :
@@ -876,7 +880,7 @@ TODO: Migració dades: duplicar dades relació
 			self.retailedProducts.add(product)
 ```
 
-### Netejar
+#### Netejar
 
 ```python
 	class Product(models.Model) :
@@ -898,10 +902,11 @@ TODO: Migració dades: duplicar dades relació
 
 TODO: Migració esquema eliminar relació
 
-### Activem el test
+#### Activem el test
 
 Després d'haver fet tot el refactor,
-ho tenim preparat per passar el test molt ràpid només treient el clear.
+ho tenim preparat per passar el test molt ràpid.
+L'activem, comprovem que encara falla i el passem només treient la linia del clear.
 
 Al final ens queda el codi així:
 
@@ -923,8 +928,94 @@ Al final ens queda el codi així:
 			return self.retailedProducts.all()
 ```
 
-
 I amb això ja tenim prou model implementat pel nostre cas d'ús.
+
+És interessant veure que el mateix procediment que ens permet
+fer el refactor, sense trencar en cap moment el codi,
+és el mateix procés que ens permet fer una migració exitosa
+d'una base de dades en producció.
+
+
+### Interficie d'administració
+
+És interessant poder tenir dades per treballar.
+Per introduir les dades del sistema farem servir la interficie `admin`.
+
+Per poder entrar-hi, si es que no hem entrat abans cal crear una compte de superusuari:
+
+```bash
+	$ ./manage.py createsuperuser
+```
+
+Accedim a <http://localhost:8001/admin>.
+Però només veiem les taules de `Auth`, `Groups` i `Users`.
+Cal que fem acessibles les nostres taules a l'admin al fitxer `menjobe/admin.py`:
+
+```python
+from django.contrib import admin
+from .models import Product
+from .models import RetailPoint
+
+admin.site.register(Product)
+admin.site.register(RetailPoint)
+```
+
+I amb aixo ja podem afegir i editar la informació de productes i punts de servei
+amb la interfície `admin`.
+Es pot personalitzar molt, però, la visió per defecte és suficient de moment.
+Encara no hem entregat res.
+
+### Adaptem l'admin per a mobils
+
+La interficie `admin` està prou bé però no està gens adaptada a interfícies mòbils.
+
+Hi ha una aplicació django que canvia la interfície per fer servir
+el framework bootstrap de Twitter.
+
+```bash
+	$ pip install django-admin-bootstrapped
+```
+
+I afegim les applicacions al `devsite/settings.py`.
+Les hem d'afegir al inici, fins ara ho feiem al final.
+
+```python
+	 INSTALLED_APPS = (
+		 'django_admin_bootstrapped.bootstrap3',
+		 'django_admin_bootstrapped',
+		 'django.contrib.admin',
+		 'django.contrib.auth',
+		 ...
+		 'menjobe',
+		 )
+
+```
+
+Magicament l'admin ha canviat i funciona igual de bé a escritori com a mòbils.
+
+### Fixtures
+
+Un cop que tinguem dades, cal anar amb molta més cura quan fem les migracions.
+
+De fet, convé tenir un parell de fixtures de dades que anem mantenint
+per construir escenaris més o menys complexos per fer testos interactius.
+
+Un cop tenim un parell d'objectes farcits, si volem desar-los com a fixture
+per recuperar-los si tornem a buidar la base de dades, cal fer:
+
+```bash
+	$ mkdir menjobe/fixtures/
+	$ ./manage.py dumpdata --format=yaml menjobe > menjobe/fixtures/una.json
+```
+
+Per carregar les dades:
+
+```bash
+	$ ./manage.py loaddata --format=yaml  menjobe/fixtures/una.json
+```
+
+TODO: Com anar migrant les fixtures
+
 
 
 ### Vistes per a una API JSON
@@ -1022,7 +1113,7 @@ I la implementació seria:
 		return JsonResponse(data, safe=False)
 ```
 
-## Relacionem els serveis amb les urls
+### Vinculem URL's als serveis
 
 
 Volem mapejar els serveis a les següents urls:
@@ -1030,13 +1121,25 @@ Volem mapejar els serveis a les següents urls:
 - `/json/allproducts`
 - `/json/productretailers/<productid>`
 
-Ho farem al fitcher `devsite/urls.py`
+Per a les urls de la nostra aplicació crearem un fitxer `urls.py` propi.
+Primer farem una redirecció a `devsite/urls.py`:
 
 ```python
-	urlpatterns = patterns('',
-		...
+	from django.conf.urls import patterns, include, url
+	from django.contrib import admin
 
-		url(r'^json/allproducts$', 'menjobe.views.allProducts'),
+	urlpatterns = patterns('',
+		url(r'^admin/', include(admin.site.urls)),
+		url('^', include('menjobe.urls', namespace='menjobe')), # <-- Changed
+	)
+```
+
+I ara creem el fitxer `menjobe/urls.py`:
+
+```python
+	from django.conf.urls import patterns, include, url
+	urlpatterns = patterns('',
+		url(r'^json/allproducts$',               'menjobe.views.allProducts'),
 		url(r'^json/productretailers/([0-9]+)$', 'menjobe.views.retailersForProduct'),
 	)
 ```
@@ -1045,59 +1148,156 @@ Comprovem que el server encara esta funcionant a l'altre terminal
 i adrecem el navegador a <http://localhost:8001/json/allproducts>.
 Veurem una llista buida, es clar, no hem afegit dades.
 
-## Admin interface
 
-Les dades les ficarem des de l'admin.
+### Web mockup
 
-Per poder entrar, si es que no hem entrat abans cal crear una compte de superusuari:
+Ara farem un mockup de la web que farà servir aquests serveis web.
+Serà lletja, els dissenyaires estan treballant en un disseny.
 
-```bash
-	$ ./manage.py createsuperuser
-```
+Concentrem-nos de moment en la funcionalitat.
+Crearem una pagina amb un desplegable que carregarem amb els productes disponibles.
+Quan canvii el valor del desplegable, cridarem a l'altre servei
+i amb el resultat farcirem una llista de punts de distribució.
 
-Accedim a <http://localhost:8001/admin>.
-Però només veiem les taules de `Auth`, `Groups` i `Users`.
-Cal que fem acessibles les nostres taules a l'admin al fitxer `menjobe/admin.py`:
+Primer afegirem una entrada en a les urls de `menjobe/urls.py`
 
 ```python
-from django.contrib import admin
-from .models import Product
-from .models import RetailPoint
+	from django.views.generic.base import TemplateView
 
-admin.site.register(Product)
-admin.site.register(RetailPoint)
+	urlpatterns = patterns('',
+		...
+		url(r'^productsearch$',
+			TemplateView.as_view(
+				template_name='menjobe/productsearch.html')),
+	)
 ```
 
-I amb aixo ja podem afegir i editar la informació de productes i punts de servei
-amb la interfície `admin`.
-Es pot adaptar molt, però no entrarem a això ara.
-
-Compte, per aixó, que un cop que tinguem dades, cal anar amb més cura amb les migracions.
-
-De fet, convé tenir un parell de fixtures de dades que anem mantenint
-per construir escenaris més o menys complexos.
-
-## Fixtures
-
-Un cop tenim un parell d'objectes farcits, si volem desar-los com a fixture
-per recuperar-los si tornem a buidar la base de dades, cal fer:
+Creem un nou directori per posar el template:
 
 ```bash
-	$ mkdir menjobe/fixtures/
-	$ ./manage.py dumpdata --format=yaml menjobe > menjobe/fixtures/una.json
+	$ mkdir -p menjobe/templates/menjobe/
 ```
 
-Per carregar les dades:
+Django recopila tots els directoris de les applicacions.
+per aixo es convenient fer servir un subdirectori amb el nom de la nostra,
+per evitar col·lisions.
+
+Ara fem el template per la nostra pàgina.
+De template no tendrà gaire perquè ens basem en serveis AJAX
+i la part dinàmica serà en JavaScript.
+L'avantatge d'aquesta forma de funcionar és que la interacció
+serà més natural, evitant els moments en que l'usuari té una pantalla en blanc
+esperant carregar la pàgina.
+
+```html
+	<!doctype html>
+	<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+	<!--[if IE 7]> <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+	<!--[if IE 8]> <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+	<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Menjo Bé: Cerca per producte</title>
+		<meta name="description" content="">
+		<meta name="author" content="GuifiBaix SCCL">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+	</head>
+	<body>
+
+	<select id='productSelect'>
+	</select>
+	<ul id='retailersList'>
+	<ul>
+
+	</body>
+
+	<script>
+	$(function () {
+		$.ajax({
+			type: 'GET',
+			datatype: 'json',
+			url: '/json/allproducts',
+			success: function(data) {
+				var html = []
+				var firstItemText = (data.length==0)?
+					"No hi ha productes disponibles" :
+					"Escull un producte";
+				html.push(
+					'<option disabled selected>'+firstItemText+'</option>\n');
+				for (var i=0; i<data.length; i++) {
+					var row=data[i];
+					html.push(
+						'<option value='+row[0]+'>'+row[1]+'</option>\n');
+				}
+				$('#productSelect').html(html.join(''));
+			},
+		});
+		$('#productSelect').change(function (ev) {
+				var productId = $(this).val();
+				$.ajax({
+					type: 'GET',
+					datatype: 'json',
+					url: '/json/productretailers/'+productId,
+					success: function(data) {
+						console.log(data);
+						html=[]
+						if (data.length==0)
+							html.push(
+								"<li>"+"No hi ha punts de venda pel producte"+'</li>');
+						for (var i=0; i<data.length; i++) {
+							var row=data[i];
+							html.push(
+								"<li>"+row[1]+"</li>\n");
+							}
+					$('#retailersList').html(html.join(''));
+					},
+				});
+			})
+	});
+	</script>
+	</html>
+```
+
+### Plantilla Bootstrap
+
+I amb això tenim la funcionalitat que voliem.
+Tot i que no és gaire maco.
+
+Els dissenyaires s'han currat un nou disseny per la pàgina principal fent servir bootstrap.
+
+
 
 ```bash
-	$ ./manage.py loaddata --format=yaml  menjobe/fixtures/una.json
+	$ mkdir -p menjobe/static/menjobe/{css,js,images}
 ```
 
-TODO: Com anar migrant les fixtures
+Creem el template com si fos una pàgina html estàtica.
+
+
+Farcirem un desplegable amb els productes disponibles
+i, quan l'usuari seleccioni un producte,
+s'actualitzarà la llista de punts de distribució.
+
+Farem servir HTML5 amb CSS i JQuery.
+
+```html
+	<html>
+		<head>
+			<script src=''></script>
+		</head>
+		
+		<body>
+		</body>
+	</html>
+```
 
 
 
+### Desplegament
 
 
+https://www.pythonanywhere.com/wiki/VirtualEnvForNewerDjango
 
 
