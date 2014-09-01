@@ -20,8 +20,8 @@ class View_Test(TestCase) :
 
 		self.assertJSONEqual(response.content.decode("utf-8"),
 			json.dumps( [
-				[1, 'Product 1'],
-				[2, 'Product 2'],
+				dict(id=1,name="Product 1"),
+				dict(id=2,name="Product 2"),
 			]))
 
 	def test_json_retailersForProduct(self) :
@@ -38,7 +38,7 @@ class View_Test(TestCase) :
 
 		self.assertJSONEqual(response.content.decode("utf-8"),
 			json.dumps( [
-				[1,"Retailer 1"],
+				dict(id=1,name="Retailer 1"),
 			]))
 
 

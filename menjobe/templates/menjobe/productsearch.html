@@ -37,7 +37,7 @@ $(function () {
 			for (var i=0; i<data.length; i++) {
 				var row=data[i];
 				html.push(
-					'<option value='+row[0]+'>'+row[1]+'</option>\n');
+					'<option value='+row.id+'>'+row.name+'</option>\n');
 			}
 			$('#productSelect').html(html.join(''));
 		},
@@ -57,7 +57,7 @@ $(function () {
 					for (var i=0; i<data.length; i++) {
 						var row=data[i];
 						html.push(
-							"<li>"+row[1]+"</li>\n");
+							"<li>"+row.name+"</li>\n");
 						}
 				$('#retailersList').html(html.join(''));
 				},

@@ -4,7 +4,7 @@ from .models import Product
 
 def allProducts(request) :
 	data = [
-		(p.id, str(p))
+		dict(id=p.id, name=str(p) )
 		for p in Product.objects.all()
 	]
 	return JsonResponse(data, safe=False)
@@ -12,7 +12,7 @@ def allProducts(request) :
 def retailersForProduct(request, productId) :
 	product = Product.objects.get(id=productId)
 	data = [
-		(r.id, str(r) )
+		dict(id=r.id, name=str(r) )
 		for r in product.retailPoints()
 	]
 	return JsonResponse(data, safe=False)
