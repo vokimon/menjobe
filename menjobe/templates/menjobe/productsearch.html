@@ -35,9 +35,9 @@
 
 	<h3>Canals de venda on pots trobar: <span id='producttitle'></span></h3>
 	<div>
-		<ul id='retailersList' class='list-group'>
-		<li class='list-group-item list-group-item-warning'>No heu triat cap producte</li>
-		</ul>
+		<div id='retailersList' class='list-group'>
+		<a class='list-group-item list-group-item-warning'>No heu triat cap producte</a>
+		</div>
 	</div>
 
 </div>
@@ -57,13 +57,13 @@ $(function () {
 		html=[]
 		if (retailers.length==0)
 			html.push(
-				"<li class='list-group-item list-group-item-danger'>"
-				+"No hi ha punts de venda pel producte"+'</li>');
+				"<a class='list-group-item list-group-item-danger'>"
+				+"No hi ha punts de venda pel producte"+'</a>');
 		for (var i=0; i<retailers.length; i++) {
 			var row=retailers[i];
 			html.push(
-				"<li class='list-group-item'><a href='/retailer/"+row.id+"'>"
-				+row.name+"</a></li>\n");
+				"<a class='list-group-item' href='/retailer/"+row.id+"'>"
+				+row.name+"</a>\n");
 			}
 		$('#retailersList').html(html.join(''));
 	}
@@ -101,7 +101,7 @@ $(function () {
 
 	function queryProductRetailers(productId, productName) {
 			$('#producttitle').html(productName)
-			$('#retailersList').html('<li class="list-group-item">Cercant...</li>');
+			$('#retailersList').html('<a class="list-group-item">Cercant...</a>');
 			$.ajax({
 				type: 'GET',
 				datatype: 'json',
