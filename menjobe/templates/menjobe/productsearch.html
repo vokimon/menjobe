@@ -1,54 +1,131 @@
 {% extends "menjobe/home.html" %}
+{% load staticfiles %}
+
+{% block extraheadercss %}
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2-bootstrap.min.css" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2-bootstrap.min.css" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" />
+	<link rel="stylesheet" href="//fk.github.io/select2-bootstrap-css/css/select2-bootstrap.css" />
+{% endblock extraheadercss %}
+
+{% block extraheaderjs  %}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.js"></script>
+{% endblock extraheaderjs %}
+
 
 {% block content %}
 
-<select id='productSelect'>
-</select>
-<ul id='retailersList'>
-</ul>
+<div class='container'>
+
+	<h2>Cerca on comprar productes</h2>
+
+	<div class='row'>
+		<input
+			class='col-xs-12 input-lg select2 form-control'
+			type='hidden'
+			id='productselector'
+			data-placeholder='Trieu un producte del camp'
+			/>
+	</div>
+
+	<div class='row hidden'>
+		<select id='productSelect' class='col-xs-12'>
+		</select>
+	</div>
+
+	<h3>Canals de venda on pots trobar: <span id='producttitle'></span></h3>
+	<div>
+		<ul id='retailersList' class='list-group'>
+		<li class='list-group-item list-group-item-warning'>No heu triat cap producte</li>
+		</ul>
+	</div>
+
+</div>
+
 
 <script>
 $(function () {
-	$.ajax({
-		type: 'GET',
-		datatype: 'json',
-		url: '/json/allproducts',
-		success: function(data) {
-			var html = []
-			var firstItemText = (data.length==0)?
-				"No hi ha productes disponibles" :
-				"Escull un producte";
+
+	function productSelectFormat(product) {
+		if (!product.id) return product.name; // optgroup
+		return "<img class='menuicon' src='{% static 'menjobe/images/product.png' %}'/> " + product.name;
+		return product.name;
+	}
+
+	function loadProductRetailersFor(retailers) {
+		console.log(retailers);
+		html=[]
+		if (retailers.length==0)
 			html.push(
-				'<option disabled selected>'+firstItemText+'</option>\n');
-			for (var i=0; i<data.length; i++) {
-				var row=data[i];
-				html.push(
-					'<option value='+row.id+'>'+row.name+'</option>\n');
+				"<li class='list-group-item list-group-item-danger'>"
+				+"No hi ha punts de venda pel producte"+'</li>');
+		for (var i=0; i<retailers.length; i++) {
+			var row=retailers[i];
+			html.push(
+				"<li class='list-group-item'><a href='/retailer/"+row.id+"'>"
+				+row.name+"</a></li>\n");
 			}
-			$('#productSelect').html(html.join(''));
-		},
-	});
-	$('#productSelect').change(function (ev) {
-			var productId = $(this).val();
+		$('#retailersList').html(html.join(''));
+	}
+
+	function setupProductSelector_Modern(values) {
+		products = values;
+		for (var i=0; i<values.length; i++)
+			values[i].text = values[i].name;
+		$("#productselector").select2({
+			allowClear: true,
+			data: products,
+			formatResult: productSelectFormat,
+			formatSelection: productSelectFormat,
+			dropdownCssClass: "bigdrop",
+//			escapeMarkup: function (m) { return m; } // as is
+			}).change(function(val) {
+				if (!val.added) return;
+				queryProductRetailers(val.added.id, val.added.name);
+			});
+		}
+	function setupProductSelector_Classic(values) {
+		var html = []
+		var firstItemText = (values.length==0)?
+			"No hi ha productes disponibles" :
+			"Trieu un producte";
+		html.push(
+			'<option disabled selected>'+firstItemText+'</option>\n');
+		for (var i=0; i<values.length; i++) {
+			var row=values[i];
+			html.push(
+				'<option value='+row.id+'>'+row.name+'</option>\n');
+			}
+		$('#productSelect').html(html.join(''));
+		}
+
+	function queryProductRetailers(productId, productName) {
+			$('#producttitle').html(productName)
+			$('#retailersList').html('<li class="list-group-item">Cercant...</li>');
 			$.ajax({
 				type: 'GET',
 				datatype: 'json',
 				url: '/json/productretailers/'+productId,
 				success: function(data) {
-					console.log(data);
-					html=[]
-					if (data.length==0)
-						html.push(
-							"<li>"+"No hi ha punts de venda pel producte"+'</li>');
-					for (var i=0; i<data.length; i++) {
-						var row=data[i];
-						html.push(
-							"<li>"+row.name+"</li>\n");
-						}
-				$('#retailersList').html(html.join(''));
+					loadProductRetailersFor(data);
 				},
 			});
+	}
+
+	$.ajax({
+		type: 'GET',
+		datatype: 'json',
+		url: '/json/allproducts',
+		success: function(data) {
+			setupProductSelector_Modern(data);
+		},
+	});
+	$('#productSelect').change(function (ev) {
+			var productId = $(this).val();
+			var productName = $('#productSelect option:selected').text();
+			queryProductRetailers(productId, productName);
 		})
+
 });
 </script>
 
