@@ -1,0 +1,241 @@
+{% load staticfiles %}
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>{{title}}</title>
+	<meta name="description" content="">
+	<meta name="author" content="{{author}}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' />
+	<link rel="stylesheet" href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css' />
+	<link rel="stylesheet" href='{% static 'menjobe/css/main.css' %}' />
+	<script src='//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.min.js'></script>
+	<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+	<script src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+	<script src='{% static 'menjobe/js/main.js' %}'></script>
+	{% block extraheaderjs %}
+	{% endblock %}
+</head>
+<body>
+
+<!--
+<span class='debug-aid visible-xs'>xs</span>
+<span class='debug-aid visible-sm'>sm</span>
+<span class='debug-aid visible-md'>md</span>
+<span class='debug-aid visible-lg'>lg</span>
+-->
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Menjo bé</a>
+			<a class='navbar-brand active' href="productsearch">
+				<img class='menuicon' src="{% static 'menjobe/images/product.png' %}" alt="Productes"></img>
+				<span class='hidden-xs'>Productes</span>
+			</a>
+			<a class='navbar-brand' href="javascript:notImplemented()">
+				<img class='menuicon' src="{% static 'menjobe/images/channel.png' %}" alt="Canals"></img>
+				<span class='visible-xs'></span>
+				<span class='hidden-xs'>Canals</span>
+			</a>
+			<a class='navbar-brand' href="javascript:notImplemented()">
+				<img class='menuicon' src="{% static 'menjobe/images/pagesia.png' %}" alt="Pagesia"></img>
+				<span class='hidden-xs'>Pagesia</span>
+			</a>
+		</div>
+
+		<nav class="collapse navbar-collapse xs-navbar-collapse" role="navigation">
+			<div class="nav pull-right navbar-nav">
+				<button class='btn btn-default navbar-btn' href="#todo">Registra't</button>
+				<button class="btn btn-success navbar-btn dropdown-toggle" data-toggle="dropdown">
+					Entra <strong class="caret"></strong>
+				</button>
+				<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+					<form class="form" role="form">
+						<div class="form-group">
+							<input type="text" placeholder="Email" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="password" placeholder="Password" class="form-control">
+						</div>
+						<div class="form-group">
+							<span class='form-group'>
+								<input id="user_remember_me" type="checkbox" name="user[remember_me]" value="1" />
+								<label for='user_remember_me'>Recorda'm</label>
+							</span>
+							<button type="submit" class="btn btn-success" style="width: 100%; height: 32px; font-size: 13px;" >Entra</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% block content %}
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Menja bé, menja del Baix</h1>
+		<p>Troba productes d'alimentació produïts a prop del teu municipi.</p>
+	</div>
+	<div id="carousel-example-generic" class="carousel slide hidden-xs" data-ride="carousel">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+			<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+			<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+		</ol>
+
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner">
+			<div class="item active">
+				<img
+					style = 'float: right'
+					src='{% static "menjobe/images/channel.svg" %}' >
+				<div class="carousel-caption">
+					<h2>Impulsa l'economia local</h2>
+					<p>Productors i consumidors aconseguim preus més justos
+					sense la gran distribució en mig.</p>
+					<p><a class="btn btn-default" href="javascript:notImplemented()" role="button">Llegir-ne més &raquo;</a></p>
+				</div>
+			</div>
+			<div class="item">
+				<img
+					style = 'float: right'
+					src='{% static "menjobe/images/product.svg" %}' >
+				<div class="carousel-caption">
+					<h2>Redueix la petjada de carboni</h2>
+					<p>No cal que el menjar viatgi tants kilòmetres quan en tenim aquí.</p>
+					<p><a class="btn btn-default" href="javascript:notImplemented()" role="button">Llegir-ne més &raquo;</a></p>
+				</div>
+			</div>
+			<div class="item">
+				<img
+					style = 'float: right'
+					src='{% static "menjobe/images/pagesia.svg" %}' >
+				<div class="carousel-caption">
+					<h2>Protegeix l'entorn rural</h2>
+					<p>Recolzant als nostres pagesos compensem la pressió especulativa sobre el territori.</p>
+					<p><a class="btn btn-default" href="javascript:notImplemented()" role="button">Llegir-ne més &raquo;</a></p>
+				</div>
+			</div>
+		</div>
+		<!-- Controls -->
+		<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+			<span class="glyphicon glyphicon-chevron-left"></span>
+		</a>
+		<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+			<span class="glyphicon glyphicon-chevron-right"></span>
+		</a>
+	</div>
+
+
+</div>
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<img
+				style = 'float: right'
+				src='{% static "menjobe/images/product.png" %}' >
+			<h2>Productes</h2>
+			<p>Cerca a on pots trobar un producte en concret navegant per tipus de producte. </p>
+			<p><a class="btn btn-default" href="productsearch" role="button">Cercar productes &raquo;</a></p>
+		</div>
+		<div class="col-md-4">
+			<img
+				style = 'float: right'
+				src='{% static "menjobe/images/channel.png" %}' >
+			<h2>Canals de venda</h2>
+			<p>Explora els diferents canals i que ofereixen. </p>
+			<p><a class="btn btn-default" href="javascript:notImplemented()" role="button">Explorar els canals  &raquo;</a></p>
+		</div>
+		<div class="col-md-4">
+			<img
+				style = 'float: right'
+				src='{% static "menjobe/images/pagesia.png" %}' >
+			<h2>Pagesia</h2>
+			<p>Coneix més sobre els teus veïns pagesos, les seves explotacions i els mètodes de cultiu que fan servir. </p>
+			<p><a class="btn btn-default" href="javascript:notImplemented()" role="button">Conéixer els meus veïns &raquo;</a></p>
+		</div>
+	</div>
+
+</div>
+
+{% endblock content %}
+
+
+<div id="footer-container">
+<footer class="wrapper text-right">
+<hr>
+<p>
+© Copyright GuifiBaix SCCL 2014
+</p>
+<p>
+<a
+	data-toggle="tooltip"
+	data-placement="top"
+	title="Els continguts d'aquesta web estan subjectes a una llicència Reconeixement-CompartirIgual 4.0 Internacional de Creative Commons"
+	rel="license"
+	target='blank'
+	href="http://creativecommons.org/licenses/by-sa/4.0/">
+	<img
+		alt="Llicència de Creative Commons"
+		style="border-width:0"
+		src="{% static 'menjobe/images/ccbysa-4.0-88x31.png' %}" />
+</a>
+<a
+	data-toggle="tooltip"
+	data-placement="top"
+	title="El programari que fa funcionar aquesta web està subjecte a una licencia GNU Affero GPL versió 3.0 o superior"
+	rel='license'
+	target='blank'
+	href='https://www.gnu.org/licenses/agpl-3.0.html'>
+	<img alt='Llicencia GNU Affero General Public License' src='{% static 'menjobe/images/agplv3-88x31.png' %}' /></a>
+<a
+	data-toggle="tooltip"
+	data-placement="top"
+	title="El codi font del programari que mou aquesta web el pots trobar al GitHub, per usar-ho, estudiar-ho, modificar-ho i distribuir-ho, segons la llicència"
+	rel='source'
+	target='blank'
+	href='http://github.com/vokimon/menjobe'>
+	<img height=31px src='{% static 'menjobe/images/logo-github.svg' %}'></a>
+</p>
+</footer>
+</div>
+
+<div class="modal fade" id="notImplemented" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog text-center">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Tanca</span></button>
+        <h4 class="modal-title" id="myModalLabel">Funcionalitat no implementada</h4>
+      </div>
+      <div class="modal-body ">
+        <p>Aquesta funcionalitat encara no està feta.</p>
+        <p>Recorda, la web la fem voluntaris, i tu pots ajudar!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Tanca</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

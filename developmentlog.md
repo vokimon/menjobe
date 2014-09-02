@@ -1182,14 +1182,16 @@ Django recopila tots els directoris de les applicacions.
 per aixo es convenient fer servir un subdirectori amb el nom de la nostra,
 per evitar col·lisions.
 
-Ara fem el template per la nostra pàgina.
+Ara fem el template per a la nostra pàgina.
 De template no tendrà gaire perquè ens basem en serveis AJAX
-i la part dinàmica serà en JavaScript.
+i la part dinàmica serà en JavaScript en el client.
 L'avantatge d'aquesta forma de funcionar és que la interacció
-serà més natural, evitant els moments en que l'usuari té una pantalla en blanc
-esperant carregar la pàgina.
+serà més suau, evitant les càrregues de pàgina.
+
+`menjobe/templates/menjobe/productsearch.html`.
 
 ```html
+	{% load staticfiles %}
 	<!doctype html>
 	<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 	<!--[if IE 7]> <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -1203,17 +1205,33 @@ esperant carregar la pàgina.
 		<meta name="author" content="GuifiBaix SCCL">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+		<script src='{% static 'menjobe/js/productsearch.js' %}'></script>
 	</head>
 	<body>
 
 	<select id='productSelect'>
 	</select>
 	<ul id='retailersList'>
-	<ul>
+	</ul>
 
 	</body>
+	</html>
+```
 
-	<script>
+Aquest és el nostre esquelet si l'executem, no és gaire espectacular.
+Cal afegir el codi JavaScript per a omplir
+primer el desplegable amb la llista de productes,
+i, quan canvii el desplegable, els items de la llista amb els distribuidors.
+
+Creem el directori per tenir fitxers estatics:
+
+```bash
+	$ mkdir -p menjobe/static/menjobe/{css,js,images}
+```
+
+I editem a `menjobe/static/menjobe/js/productsearch.js`:
+
+```javascript
 	$(function () {
 		$.ajax({
 			type: 'GET',
@@ -1235,30 +1253,40 @@ esperant carregar la pàgina.
 			},
 		});
 		$('#productSelect').change(function (ev) {
-				var productId = $(this).val();
-				$.ajax({
-					type: 'GET',
-					datatype: 'json',
-					url: '/json/productretailers/'+productId,
-					success: function(data) {
-						console.log(data);
-						html=[]
-						if (data.length==0)
-							html.push(
-								"<li>"+"No hi ha punts de venda pel producte"+'</li>');
-						for (var i=0; i<data.length; i++) {
-							var row=data[i];
-							html.push(
-								"<li>"+row[1]+"</li>\n");
-							}
-					$('#retailersList').html(html.join(''));
-					},
-				});
-			})
+			var productId = $(this).val();
+			$.ajax({
+				type: 'GET',
+				datatype: 'json',
+				url: '/json/productretailers/'+productId,
+				success: function(data) {
+					console.log(data);
+					html=[]
+					if (data.length==0)
+						html.push(
+							"<li>"+"No hi ha punts de venda pel producte"+'</li>');
+					for (var i=0; i<data.length; i++) {
+						var row=data[i];
+						html.push(
+							"<li>"+row[1]+"</li>\n");
+						}
+				$('#retailersList').html(html.join(''));
+				},
+			});
+		})
 	});
-	</script>
-	</html>
 ```
+
+### Els serveis retornen diccionaris
+
+Tot i que les dades json en array són més compactes que en diccionari,
+quan referim a `row[1]` potser de moment sabem que ens referim al nom.
+Pero en un futur, quan comencem a afegir més informació, això té pinta de no ser gaire mantenible.
+Cal canviar els serveis per fer servir diccionaris, objectes en vocabulari javascript.
+
+- Canviem els testos de les vistes perque esperin diccionaris (amb claus 'id' i 'name') i els fallem.
+- Canviem les vistes perque realment generin els diccionaris
+- Adaptem el javascript per que faci servir els atributs.
+
 
 ### Plantilla Bootstrap
 
@@ -1266,32 +1294,15 @@ I amb això tenim la funcionalitat que voliem.
 Tot i que no és gaire maco.
 
 Els dissenyaires s'han currat un nou disseny per la pàgina principal fent servir bootstrap.
+Primer la instal·larem i després la anirem partint en trossos reutilitzables.
 
-
-
-```bash
-	$ mkdir -p menjobe/static/menjobe/{css,js,images}
-```
-
-Creem el template com si fos una pàgina html estàtica.
-
-
-Farcirem un desplegable amb els productes disponibles
-i, quan l'usuari seleccioni un producte,
-s'actualitzarà la llista de punts de distribució.
-
-Farem servir HTML5 amb CSS i JQuery.
+Cal substituir les ocurrències de les imatges per:
 
 ```html
-	<html>
-		<head>
-			<script src=''></script>
-		</head>
-		
-		<body>
-		</body>
-	</html>
+	{% static 'menjobe/images/pagesia.png' %}
 ```
+
+I moure les imatges a `menjobe/static/menjobe/images/`.
 
 
 
