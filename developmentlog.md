@@ -1046,11 +1046,11 @@ Crearem un nou fitxer de test, `menjobe/test_views.py` per separar els testos de
 		def setUp(self):
 			self.factory = RequestFactory()
 
-		def test_json_allProducts(self) :                                      
-																			   
+		def test_json_allProducts(self) :
+
 			Product(name="Product 1").save()
 			Product(name="Product 2").save()
-																			   
+
 			request = self.factory.get("/booo")
 			response = allProducts(request)
 
@@ -1293,22 +1293,249 @@ Cal canviar els serveis per fer servir diccionaris, objectes en vocabulari javas
 I amb això tenim la funcionalitat que voliem.
 Tot i que no és gaire maco.
 
-Els dissenyaires s'han currat un nou disseny per la pàgina principal fent servir bootstrap.
-Primer la instal·larem i després la anirem partint en trossos reutilitzables.
+Els dissenyaires s'han currat una maqueta per la pàgina principal fent servir bootstrap.
+Bé, de fet he estat jo amb un barret de disenyaire, per això el resultat és modestet.
 
-Cal substituir les ocurrències de les imatges per:
+El disseny depén d'un seguit de recursos externs: imatges, javascripts i estils.
+Ja vam crear els directoris corresponents (`images`, `js` i `css`) a `menjobe/static/menjobe/`.
+Hi copiarem els recursos.
+
+I per a que la maqueta es pugui carregar com a template localitzant aquest recursos
+caldrà afegir, com vam fer amb l'altre template.
+Primer, a dalt de tot, la directiva:
+
+```html
+	{% load staticfiles %}
+```
+
+I cal substituir les ocurrències de les imatges per:
 
 ```html
 	{% static 'menjobe/images/pagesia.png' %}
 ```
 
-I moure les imatges a `menjobe/static/menjobe/images/`.
+Eliminant de l'encaminament `menjobe/static/`.
+
+Comprovem esquena amb esquena que el que ens han enviat pinta i interactua igual i seguim.
+
+TODO: Que ve que seria tenir un test aqui, oi?
+
+
+### Integrem la cerca a la plantilla
+
+Ara, unifiquem el prototip que teniem, `menjobe/templates/menjobe/productsearch.html`,
+amb el format de la nova pagina d'inici, `menjobe/templates/menjobe/home.html`.
+Per això jo recomano un editor de diferències.
+Jo faig servir el `vimdif`, pero requereix estar habituat al `vim`.
+
+És important anar passant coses poc a poc i comprovar que la plantilla funcional funciona.
+
+TODO: aquí ens hauria anat molt bé tenir testos amb selenium, oi?
+
+Un cop tenim a cada costat només les diferències que han d'haver-hi,
+definim al `home.html` blocs amb nom per les parts que canvien.
+
+En concret:
+
+- Tot el que va a sota del menu fins a peu de pàgina serà el block `content`
+- Farem un bloc buit `extraheadercss` al final dels css de la capcelera
+- Farem un bloc buit `extraheaderjs` al dinal dels js de la capcelera
+
+Podríem extreure una base comuna a partir d'aquí, però, de moment, no cal.
+Esforç mínim, derivarem directament de `home.html`.
+
+Un cop definits els blocs divergents, podem reescriure `productsearch.html`
+només amb la part variable:
+
+```html
+	{% extends "menjobe/home.html" %}
+	{% load staticfiles %}
+
+	{% block extraheaderjs %}
+		<script src='{% static 'menjobe/js/productsearch.js' %}'></script>
+	{% endblock extraheaderjs %}
+
+	{% block content %}
+		<select id='productSelect'>
+		</select>
+		<ul id='retailersList'>
+		</ul>
+	{% endblock content %}
+```
+
+### Cerca amb components de Bootstrap
+
+TODO: Migracio a bootstrap + bootstrap-select2
+
+
+## Desplegament
+
+### Creating the subdomain
+
+I decided to deploy the application on DreamHost.
+Dreamhost support for Django is quite limited,
+in the sense that it is not as nice than the support other platforms.
+Instead of using `mod_wsgi` or a similar wsgi implementation
+it uses Passenger, Ruby on Rails, launcher.
+
+You have to activate Passenger in your subdomain/domain.
+But be careful! if you activate it in an existing one you will lose your data.
+
+I created a subdomain for the aplication,
+say `http://menjobe.canvoki.net` from my domain `canvoki.net`.
+This implies that DreamHost will create a `~/menjobe.canvoki.net` folder.
+Within that folder you will find a `public` subdir, with a dummy website.
+
+That `public` subdir will be your website root.
+Any URL matching a file will be served as raw files.
+If no file inside `public` matches the URL, Passenger will be triggered.
+All the python code goes then at the upper level.
+
+
+### Cloning our app
+
+We will clone our app on the subdomain directory.
+I cloned it without a subdirectoy with the repository name.
+
+```bash
+	$ git clone https://github.com/vokimon/menjobe.git ~/menjobe.canvoki.net/
+```
+
+You might need to temporary move `public` and any other content outside to make the clone,
+and then move them back.
+
+
+### Installing Python3
+
+
+There is no Python 3 in DreamHost so you must to compile it from sources.
+
+We are downloading and uncompressing all the sources appart at `~/sources`.
+
+```bash
+	$ mkdir ~/sources
+	$ cd ~/sources
+	$ wget https://www.python.org/ftp/python/3.4.1/Python-3.4.1.tgz --no-check-certificate
+	$ md5sum Python-3.4.1.tgz
+	$ tar xvfz Python-3.4.1.tgz
+	$ cd Python-3.4.1
+	$ ./configure --prefix=$HOME/local
+	$ make
+	$ make install
+```
+
+Note: for some reason wget at dreamhost does no play well with certificates,
+so that's why we ignore the certificate, and we later check the md5sum and compare it
+with the one at the website.
+
+
+### Setting up the virtual environment
+
+Dreamhost installed virtualenv does not work with Python3. Lets install it.
+
+```bash
+	$ cd ~/sources
+	$ wget https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.11.6.tar.gz --no-check-certificat
+	$ md5sum virtualenv-1.11.6.tar.gz
+	$ tar xvfz virtualenv-1.11.6.tar.gz
+	$ cd virtualenv-1.11.6
+	$ ~/local/bin/python3 setup.py install
+```
+
+Now we can set the virtual environment:
+
+```bash
+	$ cd ~/menjobe.canvoki.net/
+	$ ~/local/bin/virtualenv --no-site-packages env
+```
+
+From now on all the commands are launched from `~/menjobe.canvoki.net/` and inside the environment.
+Let's install the dependencies:
+
+```bash
+	$ pip install git+git://github.com/django/django.git@stable/1.7
+	$ pip install django-admin-bootstrapped
+	$ pip install pyyaml
+```
+
+My version of `django-admin-bootstrapped`, downgrades django to 1.6 (no migrations).
+I reinstall the django 1.7 and all works perfectly.
+
+### Setting up the application
+
+At the end of the `devsite/settings.py` file add:
+
+```python
+	STATIC_ROOT = os.path.join(BASE_DIR,'public/static/')
+```
+
+Then we collects all the static files and put them under `public/static/`.
+
+```bash
+	$ ./manage.py collectstatic
+```
+
+You have to run the previous command every time the static files change.
+
+Then you have to create the database.
+
+```bash
+	$ ./manage.py migrate
+```
+
+And, just the first time, to create the superuser:
+
+```bash
+	$ ./manage.py createsuperuser
+```
+
+
+And last but not least, you have to tell Passenger there is a lot to run here.
+Create a file named `passenger_wsgi.py`, with the followin content:
+
+```python
+	import sys, os
+
+	project = 'devsite'
+	python = 'python3.4'
+	hexversion = 0x3040000
+
+	cwd = os.path.dirname(os.path.abspath(__file__))
+
+	sys.path.append(cwd)
+
+	#Switch to new python
+	if sys.hexversion < hexversion : os.execl(cwd+"/env/bin/"+ python, python, *sys.argv)
+
+	sys.path.insert(0,cwd+'/env/lib/'+python+'/site-packages')
+
+	os.environ['DJANGO_SETTINGS_MODULE'] = project+".settings"
+
+	from django.core.wsgi import get_wsgi_application
+	application = get_wsgi_application()
+```
+
+And we add execution permissions:
+
+```bash
+	$ chmod a+x passenger_wsgi.py
+```
+
+
+WARNING: The equivalent script provided by DreamHost gave me lot of headaches.
+It included too many directories on `sys.path`, included `django` package and
+you project folder. Having that many directories in path creates
+collisions which namespaces should have avoided.
+
+
+- Having problems at this stage can be tricky as the errors are not shown on any log you can access.
+- Using an wsgi error middleware won't help if the results are set as response content. Try to catch any error that comes from `start_response` and write the backtrace into an error file.
+- To reload the scripts on the server, run `touch ~/menjobe.canvoki.net/tmp/restart.txt` (change your domain).
 
 
 
-### Desplegament
 
 
-https://www.pythonanywhere.com/wiki/VirtualEnvForNewerDjango
+
 
 
