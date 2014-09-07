@@ -65,7 +65,18 @@ class RetailPoint_Test(TestCase) :
 
 	def test_description_defaultTrue(self) :
 		r = RetailPoint(name="A retailer")
+		r.save()
 		self.assertMultiLineEqual(r.description, "")
+
+	def test_description_notNone(self) :
+		r = RetailPoint(name="A retailer", description=None)
+		with self.assertRaises(IntegrityError) as cm :
+			r.save()
+		self.assertEqual(str(cm.exception),
+			'NOT NULL constraint failed: menjobe_retailpoint.description')
+
+
+
 
 class ProductsInRetailPoints_Test(TestCase) :
 	def collect(self, iterable) :

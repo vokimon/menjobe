@@ -21,7 +21,7 @@ class RetailPoint(models.Model) :
 			unique=True,
 			)
 	description = models.TextField(default="")
-	retailedProducts = models.ManyToManyField(Product, blank=True)
+	retailedProducts = models.ManyToManyField(Product, blank=True, null=False)
 
 	def __str__(self) :
 		return self.name

@@ -1584,13 +1584,7 @@ Per fer-ho fallar afegim la següent linia al model entre el `name`i `retailedPr
 
 ```
 
-Be careful not to run the migration on the database yet.
-We set the default to `None` to fail the test, but applying it to the database
-will imply an extra database data migration.
-
-```bash
-	$ ./manage test
-```
+Això ens falla el test que és el que volem.
 
 
 
