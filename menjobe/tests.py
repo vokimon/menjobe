@@ -68,13 +68,17 @@ class RetailPoint_Test(TestCase) :
 		r.save()
 		self.assertMultiLineEqual(r.description, "")
 
-	def test_description_notNone(self) :
+	def test_description_nullRaises(self) :
 		r = RetailPoint(name="A retailer", description=None)
 		with self.assertRaises(IntegrityError) as cm :
 			r.save()
 		self.assertEqual(str(cm.exception),
 			'NOT NULL constraint failed: menjobe_retailpoint.description')
 
+	def test_description_set(self) :
+		r = RetailPoint(name="A retailer", description="They\nretail")
+		r.save()
+		self.assertMultiLineEqual(r.description, "They\nretail")
 
 
 
