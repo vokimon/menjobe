@@ -1534,8 +1534,79 @@ collisions which namespaces should have avoided.
 
 
 
+## Segona iteracio: Afegim més informació i edició integrada
+
+### Rebent reaccions dels usuaris
+
+Després de posar l'aplicació a disposició d'alguns usuaris per que la provin amb algunes dades de prova,
+no és sorpresa que els usuaris ens indiquin que la següent cosa a afegir hauria de ser:
+
+- més informació sobre els distribuidors (on trobar-ho)
+- informació d'origen i tipus de cultiu dels productes
+- poder afegir informació nova
+
+### Afegint un nou camp de descripció
+
+Decidim començar pel camp de descripció.
+Ara ja tenim dades que migrar, és important que les mantinguem consistents.
+
+En el cas d'afegir un camp nou, la clau de la migració de dades és decidir
+quin valor pendran pel camp els objectes que ja existeixen.
+En aquest cas és fàcil perquè tots poden inicialitzar-se,
+d'entrada, amb una descripció en blanc.
+
+Volem un test que falli:
+
+```python
+	class RetailPoint_Test :
+		...
+		def test_description_defaultTrue(self) :
+			r = RetailPoint(name="A retailer")
+			self.assertMultiLineEqual(r.description(), "")
+```
+
+Fem servir `assertMultiLineEqual`
+perquè pels textos llargs és molt més informatiu.
+
+Per fer-ho fallar afegim la següent linia al model entre el `name`i `retailedProduct`:
+
+```python
+	class RetailPoint(models.Model) :
+		...
+		description = models.TextField(default="bad string")
+```
+
+```bash
+	$ ./manage makemigration
+	Migrations for 'menjobe':
+	  0009_retailpoint_description.py:
+	    - Add field description to retailpoint
+
+```
+
+Be careful not to run the migration on the database yet.
+We set the default to `None` to fail the test, but applying it to the database
+will imply an extra database data migration.
+
+```bash
+	$ ./manage test
+```
 
 
+
+
+
+-------------------------------------------------
+
+# Enllaços guardats
+
+- http://www.virtuosoft.eu/code/bootstrap-duallistbox/ -- Selecció múltiple passant d'una llista a l'altre
+- http://thegoods.aj7may.com/django-bootstrap-markdown/ -- Editar text amb markdown amb vista previa
+- http://goratchet.com/ -- Componentes para mobil tipo bootstrap, mismos autores, similar sintaxi
+- http://wiki.dreamhost.com/Django -- Notes de com configurar Django amb dreamhost
+- https://github.com/etianen/django-reversion --- Control de versiones para los cambios
+
+-------------------------------------------------
 
 
 

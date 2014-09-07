@@ -63,6 +63,10 @@ class RetailPoint_Test(TestCase) :
 		self.assertEqual(str(cm.exception),
 			"UNIQUE constraint failed: menjobe_retailpoint.name")
 
+	def test_description_defaultTrue(self) :
+		r = RetailPoint(name="A retailer")
+		self.assertMultiLineEqual(r.description, "")
+
 class ProductsInRetailPoints_Test(TestCase) :
 	def collect(self, iterable) :
 		return "".join("{}\n".format(o) for o in iterable)

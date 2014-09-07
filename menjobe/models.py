@@ -20,6 +20,7 @@ class RetailPoint(models.Model) :
 			default=None,
 			unique=True,
 			)
+	description = models.TextField(default="")
 	retailedProducts = models.ManyToManyField(Product, blank=True)
 
 	def __str__(self) :
