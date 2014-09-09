@@ -1,0 +1,113 @@
+- fields: {name: Pera Blanquilla}
+  model: menjobe.product
+  pk: 1
+- fields: {name: Pera Conference}
+  model: menjobe.product
+  pk: 2
+- fields: {name: Poma Fuji}
+  model: menjobe.product
+  pk: 3
+- fields: {name: Poma Golden}
+  model: menjobe.product
+  pk: 4
+- fields: {name: Poma Gala}
+  model: menjobe.product
+  pk: 5
+- fields: {name: Poma Granny Smith}
+  model: menjobe.product
+  pk: 6
+- fields: {name: Poma Reineta}
+  model: menjobe.product
+  pk: 7
+- fields: {name: Tomaquet Montserrat}
+  model: menjobe.product
+  pk: 8
+- fields: {name: Tomaquet Pebrot}
+  model: menjobe.product
+  pk: 9
+- fields: {name: Tomaquet de Branca}
+  model: menjobe.product
+  pk: 10
+- fields: {name: Tomaquet de Pera}
+  model: menjobe.product
+  pk: 11
+- fields: {name: Figues Coll de dama}
+  model: menjobe.product
+  pk: 12
+- fields: {name: "Ra\xEFm Negre Llarg"}
+  model: menjobe.product
+  pk: 13
+- fields: {name: Poma Royal}
+  model: menjobe.product
+  pk: 14
+- fields: {name: Pruna Reineta}
+  model: menjobe.product
+  pk: 15
+- fields: {name: Monjeta Perona}
+  model: menjobe.product
+  pk: 16
+- fields: {name: Monjeta Facsiosa}
+  model: menjobe.product
+  pk: 17
+- fields: {name: Esberginia Negra Llarga}
+  model: menjobe.product
+  pk: 18
+- fields: {name: Pebrot Vermell}
+  model: menjobe.product
+  pk: 19
+- fields: {name: "Pebrot Verd Itali\xE0"}
+  model: menjobe.product
+  pk: 20
+- fields: {name: Carbassa Rabequet}
+  model: menjobe.product
+  pk: 21
+- fields: {name: "Carbassa de Cabell d'\xC0ngel"}
+  model: menjobe.product
+  pk: 22
+- fields: {name: Codony}
+  model: menjobe.product
+  pk: 23
+- fields:
+    address: "Carrer Baltasar d'Espanya, 4,\r\nSant Joan Desp\xED\r\n08970 Barcelona\r\
+      \n"
+    description: "Es una cooperativa de consum auto-gestionada de productes ecol\xF2\
+      gics i de proximitat. Cada setmana, els socis encarreguen la seva cistella per\
+      \ la setmana seg\xFCent i recullen la cistella que van encarregar la setmana\
+      \ anterior. Cada setmana uns socis, els cistellaires, designats rotatoriament,\
+      \ s\xF3n qui reparteixen el que han portat els prove\xEFdors en les cistelles\
+      \ individuals.\r\n\r\nEl seus objectius s\xF3n ser:\r\n\r\n- Propers; reduint\
+      \ recursos en el transport i intermediaris.\r\n- Ecol\xF2gics; amb la m\xED\
+      nima intervenci\xF3 qu\xEDmica i gen\xE8tica i respectant l'entorn.\r\n- \xC8\
+      tics; on els preus siguin justos amb el cost real i no subjectes al mercat.\r\
+      \n- Socials; aliments a l'abast de tothom sense menysprear la tasca dels pagesos/eses\
+      \ i ramaders/eres.\r\n\r\nMail: consum.verd.stjoan@gmail.com\r\nWeb: http://esplet.bligoo.com"
+    name: Cooperativa de consum L'Esplet
+    retailedProducts: [2, 3, 4]
+  model: menjobe.retailpoint
+  pk: 1
+- fields:
+    address: null
+    description: ''
+    name: Fruiteria Verduleria Puri
+    retailedProducts: [1, 2, 3, 4]
+  model: menjobe.retailpoint
+  pk: 2
+- fields:
+    address: null
+    description: ''
+    name: Cotxera d'en Pep Clapes
+    retailedProducts: [9, 10, 11]
+  model: menjobe.retailpoint
+  pk: 3
+- fields:
+    address: "Carrer del Mercat, 2\r\nSant Joan Desp\xED\r\n08970 Barcelona"
+    description: "La L\xEDdia Homs i el Raimon Grau s\xF3n un matrimoni que porta\
+      \ una fruiteria/colmat al davant del Mercat del Centre de Sant Joan Desp\xED\
+      . Ofereixen una convinaci\xF3 de productes portats del MercaBarna amb productes\
+      \ comprats directament a la pagesia de la zona. Una bona part d'aquests provenen\
+      \ dels camps del pare de Raimon a Molins. Per saber quins s\xF3n els productes\
+      \ de la zona, simplement els pregunteu.\r\n\r\nTelf: 93 373 03 01"
+    name: "Alimentaci\xF3 Homs"
+    retailedProducts: [3, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+  model: menjobe.retailpoint
+  pk: 4
