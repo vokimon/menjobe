@@ -5,6 +5,7 @@ from . import views
 urlpatterns = patterns('',
 	url(r'^json/allproducts$',               views.allProducts),
 	url(r'^json/productretailers/([0-9]+)$', views.retailersForProduct),
+	url(r'^json/retailer/([0-9]+)$', views.retailerDetails),
 	url(r'^productsearch$',
 			TemplateView.as_view(template_name='menjobe/productsearch.html')),
 	url(r'^$',

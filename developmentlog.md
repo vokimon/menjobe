@@ -1599,6 +1599,8 @@ Això ens falla el test que és el que volem.
 - http://goratchet.com/ -- Componentes para mobil tipo bootstrap, mismos autores, similar sintaxi
 - http://wiki.dreamhost.com/Django -- Notes de com configurar Django amb dreamhost
 - https://github.com/etianen/django-reversion --- Control de versiones para los cambios
+- http://pythonhosted.org/django-markdown/ --- Markdown fields
+- http://blog.grapii.com/2010/08/how-to-build-a-simple-search-filter-with-jquery/ --- jquery based div filter
 
 -------------------------------------------------
 

@@ -6,6 +6,11 @@
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2-bootstrap.min.css" />
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" />
 	<link rel="stylesheet" href="//fk.github.io/select2-bootstrap-css/css/select2-bootstrap.css" />
+	<style>
+		.notyetimplemented {
+			display: none !important;
+		}
+	</style>
 {% endblock extraheadercss %}
 
 {% block extraheaderjs  %}
@@ -15,9 +20,9 @@
 
 {% block content %}
 
-<div class='container'>
+<div class='container' id='page-productSearch'>
 
-	<h2>Cerca on comprar productes</h2>
+	<h2>Cerca on comprar un producte</h2>
 
 	<div class='row'>
 		<input
@@ -27,44 +32,92 @@
 			data-placeholder='Trieu un producte del camp'
 			/>
 	</div>
+</div>
 
-	<div class='row hidden'>
-		<select id='productSelect' class='col-xs-12'>
-		</select>
-	</div>
-
-	<h3>Canals de venda on pots trobar: <span id='producttitle'></span></h3>
+<div class='container' id='page-productRetailers'>
+	<h3 >Canals on pots trobar: <span id='producttitle'></span></h3>
 	<div>
 		<div id='retailersList' class='list-group'>
-		<a class='list-group-item list-group-item-warning'>No heu triat cap producte</a>
+			<a class='list-group-item list-group-item-warning'>No heu triat cap producte</a>
 		</div>
 	</div>
+	<div class='pull-right'>
+		<div class='btn btn-success' id='addProductRetailerBtn'>
+			<span class="glyphicon glyphicon-plus"></span>
+			En saps cap més?
+		</div>
+		<div class='btn btn-warning btn-dropdown notyetimplemented'>
+			<span class="glyphicon glyphicon-filter"></span>
+			Filtreu
+			<span class="caret"></span>
+		</div>
+	</div>
+</div>
 
+<hr />
+
+<div id='page-retailerInfo' class='container hidden'>
+	<div class='row'>
+		<div class='panel panel-default'>
+			<div class='panel-heading'>
+				<h1 class='panel-title'>
+					<img style='width:3ex' src="{% static 'menjobe/images/channel.png' %}" />
+					<span id='retailerinfo_name'>No hi ha cap canal seleccionat</span>
+				</h1>
+			</div>
+			<div class='panel-body row'>
+				<div class='col-sm-4'>
+					<address id='retailerinfo_address' style='white-space:pre-line' class='col-md-12 center-block center-text'></address>
+
+
+					<div id='retailerinfo_image' class='text-center row'>
+						<img class='col-xs-10 col-xs-offset-1'
+							src="{% static 'menjobe/images/channel.svg' %}"
+{#							src="http://esplet.bligoo.com/media/users/22/1137106/images/public/309749/DSC_0003.JPG?v=1390496569811" #}				/>
+					</div>
+					<div class='row hidden' id='retailerinfo_contacts'>
+						<a class='btn col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 btn-default' href='http://lala.com'><span class="glyphicon glyphicon-globe"></span> Blog</a>
+						<a class='btn col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 btn-success' href='http://lalo.com'><span class="glyphicon glyphicon-globe"></span> Comandes</a>
+						<a class='btn col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 btn-warning' href='mailto:me@lala.com'><span class="glyphicon glyphicon-envelope"></span> me@lala.com</a>
+						<a class='btn col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 btn-info'    href='tel:342-423-234'><span class="glyphicon glyphicon-earphone"></span> 342 423 234</a>
+					</div>
+				</div>
+				<div class='col-sm-8'>
+					<div id="retailerinfo_description"></div>
+				</div>
+				<div class='col-sm-12 text-right'>
+					<div class='row'>
+						<div class='btn btn-default notyetimplemented'>
+							<span class="glyphicon glyphicon-map-marker"></span>
+							Mapa
+						</div>
+						<div class='btn btn-default notyetimplemented'>
+							<img style='width:1em' src='{% static 'menjobe/images/product.svg' %}'>
+							Productes
+							<span class="glyphicon glyphicon-chevron-right"></span>
+						</div>
+						<div class='btn btn-default' id='retailerinfo_editbtn'>
+							<span class="glyphicon glyphicon-pencil"></span>
+							Edita
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
 <script>
 $(function () {
+	msg_loadingData = "S'esta carregant la informació...";
+	msg_noProductRetailers = "No hi ha punts de venda pel producte";
+	msg_loadError = "S'ha produït un error quan es carregava la informació";
+	msg_noDescription = "No hi ha descripció";
 
 	function productSelectFormat(product) {
 		if (!product.id) return product.name; // optgroup
 		return "<img class='menuicon' src='{% static 'menjobe/images/product.png' %}'/> " + product.name;
-		return product.name;
-	}
-
-	function loadProductRetailersFor(retailers) {
-		html=[]
-		if (retailers.length==0)
-			html.push(
-				"<a class='list-group-item list-group-item-danger'>"
-				+"No hi ha punts de venda pel producte"+'</a>');
-		for (var i=0; i<retailers.length; i++) {
-			var row=retailers[i];
-			html.push(
-				"<a class='list-group-item' href='/retailer/"+row.id+"'>"
-				+row.name+"</a>\n");
-			}
-		$('#retailersList').html(html.join(''));
 	}
 
 	function setupProductSelector(values) {
@@ -85,16 +138,71 @@ $(function () {
 		}
 
 	function queryProductRetailers(productId, productName) {
-			$('#producttitle').html(productName)
-			$('#retailersList').html('<a class="list-group-item">Cercant...</a>');
-			$.ajax({
-				type: 'GET',
-				datatype: 'json',
-				url: '/json/productretailers/'+productId,
-				success: function(data) {
-					loadProductRetailersFor(data);
-				},
+		$('#producttitle').html(productName)
+		$('#retailersList').html('<a class="list-group-item">Cercant...</a>');
+		$.ajax({
+			type: 'GET',
+			datatype: 'json',
+			url: '/json/productretailers/'+productId,
+			success: function(data) {
+				loadProductRetailers(data);
+			},
+		});
+		$('#addProductRetailerBtn').click(function () {
+			window.location.href = "/admin/menjobe/retailpoint/";
+		});
+	}
+
+	function loadProductRetailers(retailers) {
+		$('#page-retailerInfo').addClass('hidden');
+		html=[]
+		if (retailers.length==0)
+			html.push(
+				"<a class='list-group-item list-group-item-danger'>"
+				+msg_noProductRetailers+'</a>');
+		$.each(retailers, function(i, row) {
+			html.push(
+				$('<a>').attr({
+					'class': 'list-group-item envote-product-retailer',
+					'data-id': row.id,
+					}).text(row.name)
+				);
 			});
+		$('#retailersList').html(html);
+		$('.envote-product-retailer').click(function () {
+			$('#retailersList .list-group-item').removeClass('active');
+			$(this).addClass("active");
+			loadProductDetails($(this));
+		});
+	}
+
+	function loadProductDetails(link) {
+		var retailerId = $(link).attr('data-id');
+		var retailerName = $(link).html();
+		var descriptionTag = $('#retailerinfo_description');
+		descriptionTag.removeClass();
+		descriptionTag.addClass("alert alert-info");
+		descriptionTag.html(msg_loadingData);
+		$('#retailerinfo_name').html(retailerName);
+		$('#page-retailerInfo').removeClass('hidden');
+		$.ajax({
+			type: 'GET',
+			datatype: 'json',
+			url: '/json/retailer/'+retailerId,
+			error: function(response) {
+				descriptionTag.removeClass();
+				descriptionTag.addClass("alert alert-error");
+				descriptionTag.html(msg_loadError);
+			},
+			success: function(data) {
+				descriptionTag.removeClass();
+				descriptionTag.html(data.descriptionHtml || "<p class='panel-warning'>"+msg_noDescription+"</p>" );
+				$('#retailerinfo_address').html(data.address);
+				$('#retailerinfo_editbtn').click(function () {
+					window.location.href = "/admin/menjobe/retailpoint/"+retailerId;
+					});
+			},
+		});
 	}
 
 	$.ajax({
@@ -105,13 +213,18 @@ $(function () {
 			setupProductSelector(data);
 		},
 	});
-	$('#productSelect').change(function (ev) {
-			var productId = $(this).val();
-			var productName = $('#productSelect option:selected').text();
-			queryProductRetailers(productId, productName);
-		})
+
 
 });
+
+function debug(obj) {
+	result = "";
+	$.each(obj, function (key,val) {
+		result += key+": "+val+'\n';
+	});
+	return result;
+}
+
 </script>
 
 {% endblock content %}

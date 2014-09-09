@@ -21,7 +21,12 @@ class RetailPoint(models.Model) :
 			unique=True,
 			)
 	description = models.TextField(default="")
+	address = models.TextField(default=None, null=True, blank=False)
 	retailedProducts = models.ManyToManyField(Product, blank=True, null=False)
+
+	def descriptionHtml(self) :
+		import markdown
+		return markdown.markdown(self.description)
 
 	def __str__(self) :
 		return self.name

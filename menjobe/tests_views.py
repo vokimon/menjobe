@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .views import allProducts
 from .views import retailersForProduct
+from .views import retailerDetails
 from django.test import RequestFactory
 from .models import Product
 from .models import RetailPoint
@@ -41,5 +42,26 @@ class View_Test(TestCase) :
 				dict(id=1,name="Retailer 1"),
 			]))
 
+
+	def test_json_retailerDetails(self) :
+		r1 = RetailPoint(
+			name="Retailer 1",
+			description="A nice retailer",
+			)
+		r1.save()
+
+		request = self.factory.get("/booo")
+		response = retailerDetails(request, r1.id)
+
+		self.assertJSONEqual(response.content.decode("utf-8"),
+			json.dumps( 
+				dict(
+					id=1,
+					name="Retailer 1",
+					description="A nice retailer",
+					descriptionHtml = "<p>A nice retailer</p>",
+					address = None,
+				),
+			))
 
 

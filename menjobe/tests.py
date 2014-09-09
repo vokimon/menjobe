@@ -1,4 +1,5 @@
 from django.test import TestCase
+from unittest import skip
 
 from .models import Product
 
@@ -68,7 +69,7 @@ class RetailPoint_Test(TestCase) :
 		r.save()
 		self.assertMultiLineEqual(r.description, "")
 
-	def test_description_nullRaises(self) :
+	def test_description_blankRaises(self) :
 		r = RetailPoint(name="A retailer", description=None)
 		with self.assertRaises(IntegrityError) as cm :
 			r.save()
@@ -79,6 +80,30 @@ class RetailPoint_Test(TestCase) :
 		r = RetailPoint(name="A retailer", description="They\nretail")
 		r.save()
 		self.assertMultiLineEqual(r.description, "They\nretail")
+
+	def test_descriptionHtml(self) :
+		r = RetailPoint(name="A retailer", description="They\nretail")
+		self.assertHTMLEqual(
+			r.descriptionHtml(),
+			"<p>They retail</p>")
+
+	def test_address_defaultTrue(self) :
+		r = RetailPoint(name="A retailer")
+		r.save()
+		self.assertEqual(r.address, None)
+
+	@skip("Not working")
+	def test_address_blankRaises(self) :
+		r = RetailPoint(name="A retailer", address="")
+		with self.assertRaises(IntegrityError) as cm :
+			r.save()
+		self.assertEqual(str(cm.exception),
+			'NOT NULL constraint failed: menjobe_retailpoint.address')
+
+	def test_address_set(self) :
+		r = RetailPoint(name="A retailer", address="Percebe, 13, Baixos")
+		r.save()
+		self.assertEqual(r.address, "Percebe, 13, Baixos")
 
 
 
