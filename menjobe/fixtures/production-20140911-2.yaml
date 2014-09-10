@@ -1,0 +1,191 @@
+- fields: {group: 34, level: 2, lft: 21, name: Pera Blanquilla, rght: 22, tree_id: 1}
+  model: menjobe.product
+  pk: 1
+- fields: {group: 34, level: 2, lft: 23, name: Pera Conference, rght: 24, tree_id: 1}
+  model: menjobe.product
+  pk: 2
+- fields: {group: 31, level: 2, lft: 11, name: Poma Fuji, rght: 12, tree_id: 1}
+  model: menjobe.product
+  pk: 3
+- fields: {group: 31, level: 2, lft: 5, name: Poma Golden, rght: 6, tree_id: 1}
+  model: menjobe.product
+  pk: 4
+- fields: {group: 31, level: 2, lft: 9, name: "Poma Gal\xB7la", rght: 10, tree_id: 1}
+  model: menjobe.product
+  pk: 5
+- fields: {group: 31, level: 2, lft: 7, name: Poma Granny Smith, rght: 8, tree_id: 1}
+  model: menjobe.product
+  pk: 6
+- fields: {group: 31, level: 2, lft: 13, name: Poma Reineta, rght: 14, tree_id: 1}
+  model: menjobe.product
+  pk: 7
+- fields: {group: 35, level: 2, lft: 29, name: Tomaquet Montserrat, rght: 30, tree_id: 21}
+  model: menjobe.product
+  pk: 8
+- fields: {group: 35, level: 2, lft: 31, name: Tomaquet Pebrot, rght: 32, tree_id: 21}
+  model: menjobe.product
+  pk: 9
+- fields: {group: 35, level: 2, lft: 33, name: Tomaquet de Branca, rght: 34, tree_id: 21}
+  model: menjobe.product
+  pk: 10
+- fields: {group: 35, level: 2, lft: 35, name: Tomaquet de Pera, rght: 36, tree_id: 21}
+  model: menjobe.product
+  pk: 11
+- fields: {group: 36, level: 2, lft: 27, name: Figues Coll de dama, rght: 28, tree_id: 1}
+  model: menjobe.product
+  pk: 12
+- fields: {group: 37, level: 2, lft: 31, name: "Ra\xEFm Negre Llarg", rght: 32, tree_id: 1}
+  model: menjobe.product
+  pk: 13
+- fields: {group: 31, level: 2, lft: 15, name: Poma Royal, rght: 16, tree_id: 1}
+  model: menjobe.product
+  pk: 14
+- fields: {group: 30, level: 2, lft: 35, name: Pruna Reineta, rght: 36, tree_id: 1}
+  model: menjobe.product
+  pk: 15
+- fields: {group: 38, level: 2, lft: 39, name: Monjeta Perona, rght: 40, tree_id: 21}
+  model: menjobe.product
+  pk: 16
+- fields: {group: 38, level: 2, lft: 41, name: Monjeta Facsiosa, rght: 42, tree_id: 21}
+  model: menjobe.product
+  pk: 17
+- fields: {group: 39, level: 2, lft: 19, name: Alberginia Negra Llarga, rght: 20,
+    tree_id: 21}
+  model: menjobe.product
+  pk: 18
+- fields: {group: 40, level: 2, lft: 13, name: Pebrot Vermell, rght: 14, tree_id: 21}
+  model: menjobe.product
+  pk: 19
+- fields: {group: 40, level: 2, lft: 11, name: "Pebrot Verd Itali\xE0", rght: 12,
+    tree_id: 21}
+  model: menjobe.product
+  pk: 20
+- fields: {group: 42, level: 2, lft: 3, name: Carbassa Rabequet, rght: 4, tree_id: 21}
+  model: menjobe.product
+  pk: 21
+- fields: {group: 42, level: 2, lft: 5, name: "Carbassa de Cabell d'\xC0ngel", rght: 6,
+    tree_id: 21}
+  model: menjobe.product
+  pk: 22
+- fields: {group: 33, level: 1, lft: 38, name: Codony, rght: 39, tree_id: 1}
+  model: menjobe.product
+  pk: 23
+- fields: {group: 31, level: 2, lft: 3, name: Poma Starking, rght: 4, tree_id: 1}
+  model: menjobe.product
+  pk: 24
+- fields: {group: 31, level: 2, lft: 17, name: "Poma Royal Gal\xB7la", rght: 18, tree_id: 1}
+  model: menjobe.product
+  pk: 25
+- fields: {group: 39, level: 2, lft: 17, name: Alberginia Negra Rodona, rght: 18,
+    tree_id: 21}
+  model: menjobe.product
+  pk: 26
+- fields: {group: 32, level: 2, lft: 25, name: Patata Blanca, rght: 26, tree_id: 21}
+  model: menjobe.product
+  pk: 27
+- fields: {group: 32, level: 2, lft: 23, name: Patata Vermella, rght: 24, tree_id: 21}
+  model: menjobe.product
+  pk: 28
+- fields: {group: 41, level: 1, lft: 8, name: Bledes, rght: 9, tree_id: 21}
+  model: menjobe.product
+  pk: 29
+- fields: {group: 33, level: 1, lft: 34, name: Pruna, rght: 37, tree_id: 1}
+  model: menjobe.product
+  pk: 30
+- fields: {group: 33, level: 1, lft: 2, name: Poma, rght: 19, tree_id: 1}
+  model: menjobe.product
+  pk: 31
+- fields: {group: 41, level: 1, lft: 22, name: Patata, rght: 27, tree_id: 21}
+  model: menjobe.product
+  pk: 32
+- fields: {group: null, level: 0, lft: 1, name: Fruita, rght: 40, tree_id: 1}
+  model: menjobe.product
+  pk: 33
+- fields: {group: 33, level: 1, lft: 20, name: Pera, rght: 25, tree_id: 1}
+  model: menjobe.product
+  pk: 34
+- fields: {group: 41, level: 1, lft: 28, name: Tomaquet, rght: 37, tree_id: 21}
+  model: menjobe.product
+  pk: 35
+- fields: {group: 33, level: 1, lft: 26, name: Figa, rght: 29, tree_id: 1}
+  model: menjobe.product
+  pk: 36
+- fields: {group: 33, level: 1, lft: 30, name: "Ra\xEFm", rght: 33, tree_id: 1}
+  model: menjobe.product
+  pk: 37
+- fields: {group: 41, level: 1, lft: 38, name: Monjeta tendra, rght: 43, tree_id: 21}
+  model: menjobe.product
+  pk: 38
+- fields: {group: 41, level: 1, lft: 16, name: Alberginia, rght: 21, tree_id: 21}
+  model: menjobe.product
+  pk: 39
+- fields: {group: 41, level: 1, lft: 10, name: Pebrot, rght: 15, tree_id: 21}
+  model: menjobe.product
+  pk: 40
+- fields: {group: null, level: 0, lft: 1, name: Hortalisses, rght: 44, tree_id: 21}
+  model: menjobe.product
+  pk: 41
+- fields: {group: 41, level: 1, lft: 2, name: Carbassa, rght: 7, tree_id: 21}
+  model: menjobe.product
+  pk: 42
+- fields:
+    address: "Carrer Baltasar d'Espanya, 4,\r\nSant Joan Desp\xED\r\n08970 Barcelona\r\
+      \n"
+    description: "Es una cooperativa de consum auto-gestionada de productes ecol\xF2\
+      gics i de proximitat. Cada setmana, els socis encarreguen la seva cistella per\
+      \ la setmana seg\xFCent i recullen la cistella que van encarregar la setmana\
+      \ anterior. Cada setmana uns socis, els cistellaires, designats rotatoriament,\
+      \ s\xF3n qui reparteixen el que han portat els prove\xEFdors en les cistelles\
+      \ individuals.\r\n\r\nEl seus objectius s\xF3n ser:\r\n\r\n- Propers; reduint\
+      \ recursos en el transport i intermediaris.\r\n- Ecol\xF2gics; amb la m\xED\
+      nima intervenci\xF3 qu\xEDmica i gen\xE8tica i respectant l'entorn.\r\n- \xC8\
+      tics; on els preus siguin justos amb el cost real i no subjectes al mercat.\r\
+      \n- Socials; aliments a l'abast de tothom sense menysprear la tasca dels pagesos/eses\
+      \ i ramaders/eres.\r\n\r\nMail: consum.verd.stjoan@gmail.com\r\nWeb: http://esplet.bligoo.com"
+    name: Cooperativa de consum L'Esplet
+    retailedProducts: []
+  model: menjobe.retailpoint
+  pk: 1
+- fields:
+    address: "Carrer Jacint Verdaguer, 36\r\nSant Joan Desp\xED\r\n08970 Barcelona"
+    description: "Descripci\xF3 pendent"
+    name: Fruiteria Verduleria Puri
+    retailedProducts: [12]
+  model: menjobe.retailpoint
+  pk: 2
+- fields:
+    address: "Carrer del Mercat, 2\r\nSant Joan Desp\xED\r\n08970 Barcelona"
+    description: "La L\xEDdia Homs i el Raimon Grau s\xF3n un matrimoni que porta\
+      \ una fruiteria/colmat al davant del Mercat del Centre de Sant Joan Desp\xED\
+      . Combinen els productes del MercaBarna amb productes comprats directament a\
+      \ la pagesia de la zona. Una bona part d'aquests provenen dels camps del pare\
+      \ de Raimon a Molins i la resta a pagesos de Sant Joan Desp\xED, principalment\
+      \ del Sebasti\xE0 i del Joan.\r\n\r\nSi pregunteu quins productes s\xF3n de\
+      \ la zona, el Raimon no tindr\xE0 problema en explicar-vos quins son i qui els\
+      \ hi porta.\r\n\r\nTelf: 93 373 03 01"
+    name: "Alimentaci\xF3 Homs"
+    retailedProducts: [3, 14, 12, 13, 15, 23, 21, 22, 20, 19, 18, 16, 17]
+  model: menjobe.retailpoint
+  pk: 4
+- fields:
+    address: "Carrer Torrent d'En Negre, 9\r\nSant Joan Desp\xED\r\n08970 Barcelona"
+    description: "La Lola i la seva amiga la Maria venen la fruita i verdura que recull\
+      \ el fill de la Lola, en Josep Pascual.\r\nNormalment estan ben assortides del\
+      \ que hi hagi de temporada.\r\n"
+    name: Lola
+    retailedProducts: [24, 25, 1, 29, 26, 28, 27]
+  model: menjobe.retailpoint
+  pk: 5
+- fields:
+    address: "Carrer N\xFAria, 10\r\nSant Joan Desp\xEC\r\n08970 Barcelona"
+    description: "Quan el Pedro t\xE9 producci\xF3, la Carmen, la seva dona, obre\
+      \ el local que tenen al carrer N\xFAria a les tardes de 17 a 19:30 per vendre-la.\
+      \ Normalment no t\xE9nen molt volum de producci\xF3 ni gaire varietat per\xF2\
+      \ \xE9s de tanta qualitat que paga la pena fer-los una visita si tenen algun\
+      \ dels productes que busques.\r\n\r\nA l'estiu tenen Prunes, Pomes, Figues...\
+      \ i, a l'hivern: Enciam, Col, Col-i-flor, Bledes, Fabes... Tamb\xE9 tenen Tomaquet\
+      \ de Tardor."
+    name: "Pedro el Pag\xE9s"
+    retailedProducts: [4, 12, 30, 29]
+  model: menjobe.retailpoint
+  pk: 6
