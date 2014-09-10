@@ -1587,6 +1587,32 @@ Per fer-ho fallar afegim la següent linia al model entre el `name`i `retailedPr
 Això ens falla el test que és el que volem.
 
 
+### Fent que els productes siguin una jerarquia
+
+- Primer fem un dump de les dades i ens assegurem de que tot esta commitejat
+- Incloem la applicacio mptt als settings.
+- Fem que Product derivi de django.mptt.MPTTModel
+- Afegim el camp 
+
+```python
+		group = TreeForeignKey('self', 
+			null=True,
+			blank=True,
+			related_name='subgroups',
+			default=None,
+			)
+```
+
+
+```python
+	import menjobe
+	menjobe.models.Product.objects.rebuild()
+```
+
+TODO: Com fer que aixo ho faci la migració?
+
+
+
 
 
 
@@ -1594,6 +1620,7 @@ Això ens falla el test que és el que volem.
 
 # Enllaços guardats
 
+- http://www.frutas-hortalizas.com/Fruites/ --- directori de varietats de fruita i verdura
 - http://www.virtuosoft.eu/code/bootstrap-duallistbox/ -- Selecció múltiple passant d'una llista a l'altre
 - http://thegoods.aj7may.com/django-bootstrap-markdown/ -- Editar text amb markdown amb vista previa
 - http://goratchet.com/ -- Componentes para mobil tipo bootstrap, mismos autores, similar sintaxi
@@ -1601,6 +1628,15 @@ Això ens falla el test que és el que volem.
 - https://github.com/etianen/django-reversion --- Control de versiones para los cambios
 - http://pythonhosted.org/django-markdown/ --- Markdown fields
 - http://blog.grapii.com/2010/08/how-to-build-a-simple-search-filter-with-jquery/ --- jquery based div filter
+- https://github.com/mattjmorrison/django-multiselect --- Dual list multi-column integrated with django admin
+- http://www.jqueryscript.net/demo/Responsive-jQuery-Dual-Select-Boxes-For-Bootstrap-Bootstrap-Dual-Listbox/ --- Dual list jquery-bootstrap plugin
+- http://www.jqueryscript.net/form/Efficient-Dual-List-Box-Plugin-with-jQuery-Bootstrap.html -- Dual list jquery-bootstrap plugin
+- http://www.jqueryscript.net -- Directory de plugins de jquery
+- https://djangosnippets.org/snippets/2079/ -- Canviar el widget de multiple choice al Django
+- https://github.com/stdbrouw/django-treebeard-dag --- Directed Acyclic Graph implementation for Django
+- https://github.com/elpaso/django-dag --- Directed Acyclic Graph implementation for Django
+- https://docs.djangoproject.com/en/1.7/topics/migrations/#historical-models --- why migrations have not the mptt manager available
+
 
 -------------------------------------------------
 

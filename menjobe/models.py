@@ -1,18 +1,36 @@
 from django.db import models
+from mptt.models import MPTTModel, TreeForeignKey
 
 
-class Product(models.Model) :
+
+class Product(MPTTModel) :
 	name = models.CharField(
-			max_length=200,
-			default=None,
-			unique=True,
-			)
+		max_length=200,
+		default=None,
+		unique=True,
+		)
+
+	group = TreeForeignKey('self',
+		null=True,
+		blank=True,
+		related_name='subgroups',
+		default=None,
+		)
+
+	class MPTTMeta:
+		parent_attr = 'group'
 
 	def __str__(self) :
 		return self.name
 
 	def retailPoints(self) :
-		return self.retailpoint_set.all()
+		descendantsIds = list(self
+			.get_descendants(include_self=True)
+			.values_list("id", flat=True)
+			)
+		return RetailPoint.objects.filter(
+			retailedProducts__id__in = descendantsIds
+			).distinct()
 
 class RetailPoint(models.Model) :
 	name = models.CharField(

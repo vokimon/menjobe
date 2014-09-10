@@ -34,6 +34,36 @@ class Product_Test(TestCase) :
 		self.assertEqual(str(cm.exception),
 			"UNIQUE constraint failed: menjobe_product.name")
 
+	def collect(self, iterable) :
+		return "".join("{}\n".format(o) for o in iterable)
+
+	def test_group(self) :
+		p1 = Product(name="grandpa")
+		p2 = Product(name="dad", group=p1)
+		p3 = Product(name="oncle", group=p1)
+		p4 = Product(name="me", group=p2)
+		p5 = Product(name='sis', group=p2)
+		p6 = Product(name='son', group=p4)
+		p7 = Product(name='daughter', group=p4)
+
+		for p in p1,p2,p3,p4,p5,p6,p7 : p.save()
+
+		self.assertMultiLineEqual(self.collect(p2.get_descendants()),
+			"me\n"
+			"son\n"
+			"daughter\n"
+			"sis\n"
+			)
+		self.assertMultiLineEqual(self.collect(p2.get_descendants(include_self=True)),
+			"dad\n"
+			"me\n"
+			"son\n"
+			"daughter\n"
+			"sis\n"
+			)
+
+
+
 from .models import RetailPoint
 
 class RetailPoint_Test(TestCase) :
@@ -190,6 +220,42 @@ class ProductsInRetailPoints_Test(TestCase) :
 			"Retailer 1\n"
 			"Retailer 2\n"
 			"")
+
+
+	def test_productRetailPoints_withProductHierarchy(self) :
+		r1  = RetailPoint(name="Retailer 1")
+		r2  = RetailPoint(name="Retailer 2")
+		r3  = RetailPoint(name="Retailer 3")
+		pa  = Product(name="Product A")
+		pb  = Product(name="Product B")
+		paa = Product(name="Product A.a", group=pa)
+		self.save(pa, pb, paa, r1, r2)
+
+		r1.sells(pa)
+		r2.sells(paa)
+
+		self.assertEqual(
+			self.collect(pa.retailPoints()),
+			"Retailer 1\n"
+			"Retailer 2\n"
+			"")
+
+	def test_productRetailPoints_withManyVarietiesAppearsOnce(self) :
+		r1  = RetailPoint(name="Retailer 1")
+		pa  = Product(name="Poma")
+		paa = Product(name="Poma Golden", group=pa)
+		pab = Product(name="Poma Reineta", group=pa)
+		self.save(pa, paa, pab, r1)
+
+		r1.sells(paa)
+		r1.sells(pab)
+
+		self.assertEqual(
+			self.collect(pa.retailPoints()),
+			"Retailer 1\n"
+			"")
+
+
 
 
 
