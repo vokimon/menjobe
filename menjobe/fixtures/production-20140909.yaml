@@ -67,27 +67,6 @@
 - fields: {name: Codony}
   model: menjobe.product
   pk: 23
-- fields: {name: Poma Starking}
-  model: menjobe.product
-  pk: 24
-- fields: {name: "Poma Royal Gal\xB7la"}
-  model: menjobe.product
-  pk: 25
-- fields: {name: Esberginia Negra Rodona}
-  model: menjobe.product
-  pk: 26
-- fields: {name: Patata Blanca}
-  model: menjobe.product
-  pk: 27
-- fields: {name: Patata Vermella}
-  model: menjobe.product
-  pk: 28
-- fields: {name: Bledes}
-  model: menjobe.product
-  pk: 29
-- fields: {name: Pruna}
-  model: menjobe.product
-  pk: 30
 - fields:
     address: "Carrer Baltasar d'Espanya, 4,\r\nSant Joan Desp\xED\r\n08970 Barcelona\r\
       \n"
@@ -103,49 +82,32 @@
       \n- Socials; aliments a l'abast de tothom sense menysprear la tasca dels pagesos/eses\
       \ i ramaders/eres.\r\n\r\nMail: consum.verd.stjoan@gmail.com\r\nWeb: http://esplet.bligoo.com"
     name: Cooperativa de consum L'Esplet
-    retailedProducts: []
+    retailedProducts: [2, 3, 4]
   model: menjobe.retailpoint
   pk: 1
 - fields:
-    address: "Carrer Jacint Verdaguer, 36\r\nSant Joan Desp\xED\r\n08970 Barcelona"
-    description: "Descripci\xF3 pendent"
+    address: null
+    description: ''
     name: Fruiteria Verduleria Puri
-    retailedProducts: [12]
+    retailedProducts: [1, 2, 3, 4]
   model: menjobe.retailpoint
   pk: 2
+- fields:
+    address: null
+    description: ''
+    name: Cotxera d'en Pep Clapes
+    retailedProducts: [9, 10, 11]
+  model: menjobe.retailpoint
+  pk: 3
 - fields:
     address: "Carrer del Mercat, 2\r\nSant Joan Desp\xED\r\n08970 Barcelona"
     description: "La L\xEDdia Homs i el Raimon Grau s\xF3n un matrimoni que porta\
       \ una fruiteria/colmat al davant del Mercat del Centre de Sant Joan Desp\xED\
-      . Combinen els productes del MercaBarna amb productes comprats directament a\
-      \ la pagesia de la zona. Una bona part d'aquests provenen dels camps del pare\
-      \ de Raimon a Molins i la resta a pagesos de Sant Joan Desp\xED, principalment\
-      \ del Sebasti\xE0 i del Joan.\r\n\r\nSi pregunteu quins productes s\xF3n de\
-      \ la zona, el Raimon no tindr\xE0 problema en explicar-vos quins son i qui els\
-      \ hi porta.\r\n\r\nTelf: 93 373 03 01"
+      . Ofereixen una convinaci\xF3 de productes portats del MercaBarna amb productes\
+      \ comprats directament a la pagesia de la zona. Una bona part d'aquests provenen\
+      \ dels camps del pare de Raimon a Molins. Per saber quins s\xF3n els productes\
+      \ de la zona, simplement els pregunteu.\r\n\r\nTelf: 93 373 03 01"
     name: "Alimentaci\xF3 Homs"
     retailedProducts: [3, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   model: menjobe.retailpoint
   pk: 4
-- fields:
-    address: "Carrer Torrent d'En Negre, 9\r\nSant Joan Desp\xED\r\n08970 Barcelona"
-    description: "La Lola i la seva amiga la Maria venen la fruita i verdura que recull\
-      \ el fill de la Lola, en Josep Pascual.\r\nNormalment estan ben assortides del\
-      \ que hi hagi de temporada.\r\n"
-    name: Lola
-    retailedProducts: [1, 24, 25, 26, 27, 28, 29]
-  model: menjobe.retailpoint
-  pk: 5
-- fields:
-    address: "Carrer N\xFAria, 10\r\nSant Joan Desp\xEC\r\n08970 Barcelona"
-    description: "Quan el Pedro t\xE9 producci\xF3, la Carmen, la seva dona, obre\
-      \ el local que tenen al carrer N\xFAria a les tardes de 17 a 19:30 per vendre-la.\
-      \ Normalment no t\xE9nen molt volum de producci\xF3 ni gaire varietat per\xF2\
-      \ \xE9s de tanta qualitat que paga la pena fer-los una visita si tenen algun\
-      \ dels productes que busques.\r\n\r\nA l'estiu tenen Prunes, Pomes, Figues...\
-      \ i, a l'hivern: Enciam, Col, Col-i-flor, Bledes, Fabes... Tamb\xE9 tenen Tomaquet\
-      \ de Tardor."
-    name: "Pedro el Pag\xE9s"
-    retailedProducts: [4, 12, 29, 30]
-  model: menjobe.retailpoint
-  pk: 6
