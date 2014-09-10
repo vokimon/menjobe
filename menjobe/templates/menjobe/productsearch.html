@@ -42,10 +42,10 @@
 		</div>
 	</div>
 	<div class='pull-right'>
-		<div class='btn btn-success' id='addProductRetailerBtn'>
+		<a class='btn btn-success' id='addProductRetailerBtn'>
 			<span class="glyphicon glyphicon-plus"></span>
 			En saps cap més?
-		</div>
+		</a>
 		<div class='btn btn-warning btn-dropdown notyetimplemented'>
 			<span class="glyphicon glyphicon-filter"></span>
 			Filtreu
@@ -91,18 +91,38 @@
 							<span class="glyphicon glyphicon-map-marker"></span>
 							Mapa
 						</div>
-						<div class='btn btn-default notyetimplemented'>
+						<div class='btn btn-default' id='retailerinfo_productsbtn'>
 							<img style='width:1em' src='{% static 'menjobe/images/product.svg' %}'>
 							Productes
 							<span class="glyphicon glyphicon-chevron-right"></span>
 						</div>
-						<div class='btn btn-default' id='retailerinfo_editbtn'>
+						<a class='btn btn-default' id='retailerinfo_editbtn'>
 							<span class="glyphicon glyphicon-pencil"></span>
 							Edita
-						</div>
+						</a>
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class='container' id='page-retailerProducts'>
+	<h3>Productes locals oferits per: <span id='retailertitle'></span></h3>
+	<div>
+		<div id='productList' class='list-group'>
+			<a class='list-group-item list-group-item-warning'>No heu triat cap canal</a>
+		</div>
+	</div>
+	<div class='pull-right'>
+		<div class='btn btn-success' id='addRetailerProductBtn'>
+			<span class="glyphicon glyphicon-plus"></span>
+			Que tènen quelcom més?
+		</div>
+		<div class='btn btn-warning btn-dropdown notyetimplemented'>
+			<span class="glyphicon glyphicon-filter"></span>
+			Filtreu
+			<span class="caret"></span>
 		</div>
 	</div>
 </div>
@@ -111,6 +131,7 @@
 <script>
 $(function () {
 	msg_loadingData = "S'esta carregant la informació...";
+	msg_noRetailerProducts = "No hi ha productes per aquest punt de venda";
 	msg_noProductRetailers = "No hi ha punts de venda pel producte";
 	msg_loadError = "S'ha produït un error quan es carregava la informació";
 	msg_noDescription = "No hi ha descripció";
@@ -148,13 +169,12 @@ $(function () {
 				loadProductRetailers(data);
 			},
 		});
-		$('#addProductRetailerBtn').click(function () {
-			window.location.href = "/admin/menjobe/retailpoint/";
-		});
+		$('#addProductRetailerBtn').attr('href', "/admin/menjobe/retailpoint/");
 	}
 
 	function loadProductRetailers(retailers) {
 		$('#page-retailerInfo').addClass('hidden');
+		$('#page-retailerProducts').addClass('hidden');
 		html=[]
 		if (retailers.length==0)
 			html.push(
@@ -163,23 +183,31 @@ $(function () {
 		$.each(retailers, function(i, row) {
 			html.push(
 				$('<a>').attr({
-					'class': 'list-group-item envote-product-retailer',
+					'class': 'list-group-item list-item-product-retailer',
 					'data-id': row.id,
 					}).text(row.name)
 				);
 			});
 		$('#retailersList').html(html);
-		$('.envote-product-retailer').click(function () {
+		$('.list-item-product-retailer').click(function () {
 			$('#retailersList .list-group-item').removeClass('active');
 			$(this).addClass("active");
 			loadProductDetails($(this));
 		});
 	}
+	$('#retailerinfo_productsbtn').click(function() {
+		var page = $('#page-retailerInfo')
+		var retailerId = page.attr("data-id");
+		var retailerName = page.attr("data-name");
+		queryRetailerProducts(retailerId, retailerName)
+	});
 
 	function loadProductDetails(link) {
 		var retailerId = $(link).attr('data-id');
 		var retailerName = $(link).html();
 		var descriptionTag = $('#retailerinfo_description');
+		$("#page-retailerInfo").attr('data-id', retailerId);
+		$("#page-retailerInfo").attr('data-name', retailerName);
 		descriptionTag.removeClass();
 		descriptionTag.addClass("alert alert-info");
 		descriptionTag.html(msg_loadingData);
@@ -198,12 +226,47 @@ $(function () {
 				descriptionTag.removeClass();
 				descriptionTag.html(data.descriptionHtml || "<p class='panel-warning'>"+msg_noDescription+"</p>" );
 				$('#retailerinfo_address').html(data.address);
-				$('#retailerinfo_editbtn').click(function () {
-					window.location.href = "/admin/menjobe/retailpoint/"+retailerId;
-					});
+				$('#retailerinfo_editbtn').attr('href', "/admin/menjobe/retailpoint/"+retailerId);
 			},
 		});
 	}
+
+	function queryRetailerProducts(retailerId, retailerName) {
+		$('#page-retailerProducts').removeClass('hidden');
+		$('#page-retailerProducts #retailertitle').html(retailerName)
+		$('#page-retailerProducts #retailertitle').html(retailerName)
+		$.ajax({
+			type: 'GET',
+			datatype: 'json',
+			url: '/json/retailer/'+retailerId+'/products',
+			error: function(response) {
+				alert("TODO: No he pogut baixar els productes del canal");
+			},
+			success: function(products) {
+				renderRetailerProducts(products);
+			},
+		});
+	}
+
+	function renderRetailerProducts(products) {
+		$('#page-*').addClass('hidden');
+		$('#page-retailerProducts').removeClass('hidden');
+		html=[]
+		if (products.length==0)
+			html.push(
+				"<a class='list-group-item list-group-item-danger'>"
+				+msg_noRetailerProducts+'</a>');
+		$.each(products, function(i, row) {
+			html.push(
+				$('<a>').attr({
+					'class': 'list-group-item list-item-retailer-product',
+					'data-id': row.id,
+					}).text(row.name)
+				);
+			});
+		$('#productList').html(html);
+	}
+
 
 	$.ajax({
 		type: 'GET',
