@@ -17,6 +17,14 @@ def retailersForProduct(request, productId) :
 	]
 	return JsonResponse(data, safe=False)
 
+def productsForRetailer(request, retailerId) :
+	retailer = RetailPoint.objects.get(id=retailerId)
+	data = [
+		dict(id=p.id, name=str(p) )
+		for p in retailer.retailedProducts.all()
+	]
+	return JsonResponse(data, safe=False)
+
 def retailerDetails(request, retailerId) :
 	retailer = RetailPoint.objects.get(id=retailerId)
 	data = dict(
